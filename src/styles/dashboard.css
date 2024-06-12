@@ -1,0 +1,77 @@
+.container {
+    
+}
+
+.expense-list-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-button-row {
+    display: flex;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: blue;
+    width: 60%;
+}
+
+.expense-list-header {
+    display: flex;
+    width: 50%;
+    background-color: red;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.list-of-expenses {     
+    height: 75vh;
+    width: 50%;
+    overflow-y: scroll;
+    padding-right: 5%;
+    padding-left: 5%;
+}
+
+.element {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+    border-bottom: 2px solid gray;
+}
+
+.year-dropdown {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.year-content {
+    position: absolute;
+    top: 100%;
+    z-index: 1;
+    background-color: blue;
+    
+}
+
+.year-entry {
+    padding: 15px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border-bottom: 1px solid gray;
+}
+
+.year-entry:hover {
+    background-color: red;
+    cursor: pointer;
+}
+
+.year-entry-text {
+    padding-left: 5px;
+    padding-right: 5px;
+}
