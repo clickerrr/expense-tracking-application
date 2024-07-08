@@ -2,7 +2,6 @@ import Navbar from "../organisms/Navbar";
 import "../../styles/login.css";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { AuthContext } from '../../AuthenticationContext';
 
 const Login = () => {

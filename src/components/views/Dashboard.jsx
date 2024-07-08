@@ -3,27 +3,68 @@ import Navbar from "../organisms/Navbar";
 import '../../styles/master.css';
 import '../../styles/dashboard.css';
 import randomDates from '../atoms/RandomDates';
-import expenseList from '../atoms/ExpenseList';
+import sampleExpenseList from '../atoms/ExpenseList';
 import { getAuth } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../AuthenticationContext';
 import ExpenseAdder from '../organisms/ExpenseAdder';
+import { db } from '../../firebase-config';
+import { getDocs, collection, addDoc } from 'firebase/firestore';
 
 const Dashboard = () => {
   
   const navigate = useNavigate();
   const { loading, logOut, user } = useContext(AuthContext);
-  // const [expenseList, setExpenseList] = useState([]);
+  const [expenseList, setExpenseList] = useState([]);
+  const [newExpense, setNewExpense] = useState(null);
   const [yearDropdownEnabled, setYearDropdownEnabled] = useState(false);
   const [selectedYear, setSelectedYear] = useState(null);
   const [showExpenseAdder, setShowExpenseAdder] = useState(false);
   
+  const [todos, setTodos] = useState([]);
+ 
+  const fetchPost = async () => {
+      
+    await getDocs(collection(db, "expenses", user.uid, new Date().getFullYear().toString()))
+      .then((querySnapshot)=>{               
+          const newData = querySnapshot.docs.map( (doc) => { return {...doc.data(), docId: doc.id} });
+          console.log(newData);
+          console.log(`FETCHPOST Current Expense List `);
+          console.log(expenseList);
+          setExpenseList([...expenseList, ...newData]);
+          // setExpenseList([...expenseList, ...sampleExpenseList]);
+      }).catch( (error) => {console.log(error);})
+  }
+    
+    
+  const addNewExpense = async (expenseItem) => {
+    
+    console.log(user.uid)
+    console.log(expenseItem);
+    
+    // Add a new document with a generated id.
+    const docRef = await addDoc(collection(db, "expenses", user.uid, expenseItem.date.getFullYear().toString()), {
+      name: expenseItem.name,
+      amount: expenseItem.amount,
+      category: expenseItem.category,
+      date: expenseItem.date.toJSON(),
+      userId: user.uid,
+    }).then( () => {setExpenseList([...expenseList, expenseItem])}).catch( (error) => {console.log(error)});
+      
+  }
+   
+  useEffect(()=>{
+      
+      fetchPost();
+  }, [])
+
+
   const categories = ["Food", "Gas", "Grocery", "Personal", "Subscriptions"];
   const years = ["2019", "2020", "2021", "2022", "2023", "2024"];
   let dates = []
   
   useEffect(()=>{
-    console.log(user);
+    // console.log(user);
     
     if(user === null)
     {
@@ -109,7 +150,7 @@ const Dashboard = () => {
     <div>
       <Navbar routes={[{name: "Dashboard", path: "/"}, {name: "Other", path: "/"}]}/>
       <div className="container">
-        {showExpenseAdder ? <ExpenseAdder onClose={() => setShowExpenseAdder(false)}/> : (<></>)}
+        {showExpenseAdder ? <ExpenseAdder onClose={() => setShowExpenseAdder(false)} addNewExpense={addNewExpense}/> : (<></>)}
         <div>
           <h1>Expenses</h1>
         </div>

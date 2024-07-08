@@ -1,4 +1,4 @@
-const expenseList = [
+const sampleExpenseList = [
     {
         "id": 1,
         "name": "Expense: 1",
@@ -351,4 +351,4 @@ const expenseList = [
     }
 ]
 
-export default expenseList;
+export default sampleExpenseList;

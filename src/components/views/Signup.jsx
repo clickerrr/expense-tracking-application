@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase-config";
 import Navbar from "../organisms/Navbar";
 import "../../styles/signup.css";
+import { AuthContext } from '../../AuthenticationContext';
 
 const Signup = () => {
     
     const navigate = useNavigate();
+    const { createUser } = useContext(AuthContext);
     const [emailValue, setEmailValue] = useState('');
     const [passwordValue, setPasswordValue] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -43,12 +45,10 @@ const Signup = () => {
     const handleSignUp = () => {
 
         if(verifyFields() === true) return;
-
-        createUserWithEmailAndPassword(auth, emailValue, passwordValue)
-        .then((userCredential) => {
-            // Signed up 
-            const user = userCredential.user;
-            // ...
+        createUser(emailValue, passwordValue)
+        .then((result) => {
+            console.log(result);
+            navigate("/");
         })
         .catch((error) => {
             const errorCode = error.code;
