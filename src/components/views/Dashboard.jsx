@@ -2,9 +2,6 @@ import { useEffect, useState, useContext } from 'react'
 import Navbar from "../organisms/Navbar";
 import '../../styles/master.css';
 import '../../styles/dashboard.css';
-import randomDates from '../atoms/RandomDates';
-import sampleExpenseList from '../atoms/ExpenseList';
-import { getAuth } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../AuthenticationContext';
 import ExpenseAdder from '../organisms/ExpenseAdder';
@@ -24,7 +21,6 @@ const Dashboard = () => {
   const [todos, setTodos] = useState([]);
  
   const fetchPost = async () => {
-      
     await getDocs(collection(db, "expenses", user.uid, new Date().getFullYear().toString()))
       .then((querySnapshot)=>{               
           const newData = querySnapshot.docs.map( (doc) => { return {...doc.data(), docId: doc.id} });
@@ -49,7 +45,7 @@ const Dashboard = () => {
       category: expenseItem.category,
       date: expenseItem.date.toJSON(),
       userId: user.uid,
-    }).then( () => {setExpenseList([...expenseList, expenseItem])}).catch( (error) => {console.log(error)});
+    }).then( () => {fetchPost()}).catch( (error) => {console.log(error)});
       
   }
    
@@ -97,6 +93,9 @@ const Dashboard = () => {
     {
       return expenseList.map((element, id) => {
         let elementDate = new Date(element.date)
+        console.log(element);
+        console.log(elementDate.getFullYear());
+        console.log(selectedYear);
         return( 
           <div key={id} className="element">
             <div>
@@ -118,6 +117,9 @@ const Dashboard = () => {
     else {
       return expenseList.map((element, id) => {
         let elementDate = new Date(element.date)
+        console.log(element);
+        console.log(elementDate.getFullYear());
+        console.log(selectedYear);
         if(elementDate.getFullYear() == selectedYear)
         {
           return(
