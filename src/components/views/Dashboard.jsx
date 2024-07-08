@@ -20,8 +20,8 @@ const Dashboard = () => {
   
   const [todos, setTodos] = useState([]);
  
-  const fetchPost = async () => {
-    await getDocs(collection(db, "expenses", user.uid, new Date().getFullYear().toString()))
+  const fetchPost = async (year) => {
+    await getDocs(collection(db, "expenses", user.uid, year))
       .then((querySnapshot)=>{               
           const newData = querySnapshot.docs.map( (doc) => { return {...doc.data(), docId: doc.id} });
           console.log(newData);
@@ -31,7 +31,6 @@ const Dashboard = () => {
           // setExpenseList([...expenseList, ...sampleExpenseList]);
       }).catch( (error) => {console.log(error);})
   }
-    
     
   const addNewExpense = async (expenseItem) => {
     
@@ -45,13 +44,13 @@ const Dashboard = () => {
       category: expenseItem.category,
       date: expenseItem.date.toJSON(),
       userId: user.uid,
-    }).then( () => {fetchPost()}).catch( (error) => {console.log(error)});
+    }).then( () => {fetchPost(new Date().getFullYear().toString())}).catch( (error) => {console.log(error)});
       
   }
    
   useEffect(()=>{
       
-      fetchPost();
+      fetchPost(new Date().getFullYear().toString());
   }, [])
 
 
