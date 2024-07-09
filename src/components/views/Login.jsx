@@ -1,27 +1,30 @@
 import Navbar from "../organisms/Navbar";
 import "../../styles/login.css";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { AuthContext } from '../../AuthenticationContext';
 
 const Login = () => {
 
+    const { loginUser, loading, user } = useContext(AuthContext);
     const navigate = useNavigate();
-    const [usernameValue, setUsernameValue] = useState('');
+    const [emailValue, setEmailValue] = useState('');
     const [passwordValue, setPasswordValue] = useState('');
-    const [usernameError, setUsernameError] = useState('');
+    const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [generalError, setGeneralError] = useState('');
 
-    const performLogin = () => {
+    const verifyFields = () => {
         let error = false;
-        if(usernameValue.length === 0)
+        if(emailValue.length === 0)
         {
-            setUsernameError("Please enter a username"); 
+            setEmailError("Please enter an email"); 
             error = true;
         }
         else
         {
-            setUsernameError("");            
+            setEmailError("");            
         }
 
         if(passwordValue.length === 0)
@@ -34,11 +37,30 @@ const Login = () => {
             setPasswordError("");   
         }
 
-        if(!error)
-        {
-            navigate("/");
-        }
+        
+        return error;
+        
+        
+
     }
+
+    
+
+    const handleLogin = () => {
+        if(verifyFields()) return;
+        loginUser(emailValue, passwordValue)
+        .then((result) => {
+            console.log(result);
+            navigate("/");
+        })
+        .catch((error) => {
+            console.error(`${error}`);
+            setGeneralError("Invalid email or password");
+        });
+
+    }
+
+    
 
     return(
         <>
@@ -48,15 +70,16 @@ const Login = () => {
                 <div className="login-container">
                     <h1 className="login-title">Login</h1>
                     <div className="form-field">
-                        <input onChange={(event) => {setUsernameValue(event.target.value)}} type="text" className="form-input" name="username" value={usernameValue} placeholder="Username"></input>
-                        <span className="error">{usernameError}</span>
+                        <input onChange={(event) => {setEmailValue(event.target.value)}} type="email" className="form-input" name="email" value={emailValue} placeholder="Email"></input>
+                        <span className="error">{emailError}</span>
                     </div>
                     <div className="form-field">
                         <input onChange={(event) => {setPasswordValue(event.target.value)}} type="password" className="form-input" name="password" value={passwordValue} placeholder="Password"></input>
                         <span className="error">{passwordError}</span>
                     </div>
                     <div className="form-field">
-                    <input className="login-button" type="button" onClick={performLogin} value={'Log in'} />
+                        <input className="login-button" type="button" onClick={handleLogin} value={'Log in'} />
+                        <span className="error">{generalError}</span>
                     </div>
                 </div>
             </div>

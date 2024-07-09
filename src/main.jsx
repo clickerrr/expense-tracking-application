@@ -5,11 +5,16 @@ import Login from './components/views/Login.jsx'
 import Signup from "./components/views/Signup.jsx";
 import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import AuthProvider from './AuthenticationContext.jsx';
+import PrivateRoute from './PrivateRoute.jsx';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Dashboard/>,
+    element: (
+    <PrivateRoute>
+      <Dashboard/>
+    </PrivateRoute>),
   },
   {
     path: "/login",
@@ -24,9 +29,10 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
   
   <React.StrictMode>
-    <RouterProvider router={router}>
-
-      <Dashboard />
-    </RouterProvider>
+    <AuthProvider>
+      <RouterProvider router={router}>
+        <Dashboard />
+      </RouterProvider>
+    </AuthProvider>
   </React.StrictMode>,
 )

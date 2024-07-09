@@ -1,0 +1,77 @@
+.parent {
+    display: flex;
+    justify-content: center;
+}
+
+.signup-container {
+    margin: 5%;
+    background-color: #66666E;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+    border-radius: 10px;
+}
+
+
+.signup-title {
+    font-size: 2em;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-input {
+    margin-bottom: 1%;
+    padding: 10px;
+    height: 1%;
+}
+
+.signup-button { 
+    align-self: center;
+}
+
+.error {
+    color: red;
+}
+
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) 
+{
+    .signup-container {
+        width: 90%;
+    }
+    
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) 
+{
+    .signup-container {
+        width: 50%;
+    }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) 
+{
+    
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) 
+{
+    .signup-container {
+        width: 30%;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) 
+{
+    
+}

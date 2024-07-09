@@ -1,0 +1,20 @@
+.adder-parent {
+    
+    position: absolute;
+    top: 25vh;
+    
+    margin: auto;
+    width: 50%;
+    height: 50vh;
+    z-index: 2;
+    background-color: blue;
+    display: flex;
+}
+
+.adder-header {
+    background-color: green;
+}
+
+.adder-container {
+    background-color: purple;
+}

@@ -1,28 +1,37 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import Navbar from "../organisms/Navbar";
 import '../../styles/master.css';
 import '../../styles/dashboard.css';
 import randomDates from '../atoms/RandomDates';
 import expenseList from '../atoms/ExpenseList';
-import { render } from 'react-dom';
-import { setEmitFlags } from 'typescript';
+import { getAuth } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../AuthenticationContext';
+import ExpenseAdder from '../organisms/ExpenseAdder';
 
 const Dashboard = () => {
   
+  const navigate = useNavigate();
+  const { loading, logOut, user } = useContext(AuthContext);
   // const [expenseList, setExpenseList] = useState([]);
   const [yearDropdownEnabled, setYearDropdownEnabled] = useState(false);
   const [selectedYear, setSelectedYear] = useState(null);
+  const [showExpenseAdder, setShowExpenseAdder] = useState(false);
   
   const categories = ["Food", "Gas", "Grocery", "Personal", "Subscriptions"];
   const years = ["2019", "2020", "2021", "2022", "2023", "2024"];
   let dates = []
-
+  
+  useEffect(()=>{
+    console.log(user);
     
- 
-  const updateExpenseList = () => {
-
-  }
-
+    if(user === null)
+    {
+      console.log("Redirecting");
+      navigate("/login");
+    }
+  },[user])
+  
   const handleSelectYear = (yearIndex) => {
     setSelectedYear(years[yearIndex]);
     console.log(yearIndex);
@@ -100,13 +109,21 @@ const Dashboard = () => {
     <div>
       <Navbar routes={[{name: "Dashboard", path: "/"}, {name: "Other", path: "/"}]}/>
       <div className="container">
+        {showExpenseAdder ? <ExpenseAdder onClose={() => setShowExpenseAdder(false)}/> : (<></>)}
         <div>
           <h1>Expenses</h1>
+        </div>
+        
+        <div>
+          <button className='signout-button' onClick={logOut}>Sign Out</button>
         </div>
 
         <div className="expense-list-container">
           <h2>This Year {selectedYear !== null ? selectedYear : "All"}</h2>
           <h2>This Month</h2>
+          <div>
+            <button onClick={() => {setShowExpenseAdder(!showExpenseAdder)}}>+</button>
+          </div>
           <div className='header-button-row'>
             <div className='year-dropdown'>
               <button className='year-button' onClick={() => {setYearDropdownEnabled(!yearDropdownEnabled )}}>Year</button>

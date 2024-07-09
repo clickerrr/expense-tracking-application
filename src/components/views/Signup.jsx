@@ -1,11 +1,88 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase-config";
 import Navbar from "../organisms/Navbar";
+import "../../styles/signup.css";
 
 const Signup = () => {
+    
+    const navigate = useNavigate();
+    const [emailValue, setEmailValue] = useState('');
+    const [passwordValue, setPasswordValue] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [generalError, setGeneralError] = useState('');
+    
+    const verifyFields = () => {
+        let error = false;
+        if(emailValue.length === 0)
+        {
+            setEmailError("Please enter an email"); 
+            error = true;
+        }
+        else
+        {
+            setEmailError("");            
+        }
+
+        if(passwordValue.length === 0)
+        {
+            setPasswordError("Please enter a password"); 
+            error = true;
+        }
+        else
+        {
+            setPasswordError("");   
+        }
+
+        return error;
+    }
+
+    
+    const handleSignUp = () => {
+
+        if(verifyFields() === true) return;
+
+        createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+        .then((userCredential) => {
+            // Signed up 
+            const user = userCredential.user;
+            // ...
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error(`${errorCode}: ${errorMessage}`);
+            setGeneralError("Invalid email or password");
+        });
+
+    }
+    
+
+    
     return(
-        <div>
+        <>
             <Navbar routes={[{name: "Login", path: "/login"}]}/>
-            <p>Signup page</p>
-        </div>
+            <div className="parent">
+                
+                <div className="signup-container">
+                    <h1 className="signup-title">Sign Up</h1>
+                    <div className="form-field">
+                        <input onChange={(event) => {setEmailValue(event.target.value)}} type="email" className="form-input" name="email" value={emailValue} placeholder="Email"></input>
+                        <span className="error">{emailError}</span>
+                    </div>
+                    <div className="form-field">
+                        <input onChange={(event) => {setPasswordValue(event.target.value)}} type="password" className="form-input" name="password" value={passwordValue} placeholder="Password"></input>
+                        <span className="error">{passwordError}</span>
+                    </div>
+                    <div className="form-field">
+                        <input className="signup-button" type="button" onClick={handleSignUp} value={'Sign up'} />
+                        <span className="error">{generalError}</span>
+                    </div>
+                </div>
+            </div>
+        </>
     )
 }
 
