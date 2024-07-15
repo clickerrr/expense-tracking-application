@@ -1,20 +1,45 @@
 .adder-parent {
-    
-    position: absolute;
-    top: 25vh;
-    
-    margin: auto;
-    width: 50%;
-    height: 50vh;
-    z-index: 2;
-    background-color: blue;
+    position: fixed;
     display: flex;
+    flex-direction: column;
+    top: 50%;
+    left: 50%;
+    width: 15vw;
+    transform: translate(-50%, -50%);
+    color: white; background: #666666;
+    
+    z-index: 1000;
+    padding: 10px;
 }
 
 .adder-header {
     background-color: green;
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 1%;
 }
 
 .adder-container {
     background-color: purple;
+    display: flex;
+    flex-direction: column;
 }
+
+.adder-container input { 
+    margin: 10px;
+}
+
+.adder-container label {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 5px;
+}
+
+.adder-container button {
+    margin: 10px;
+}
+
+.red-text {
+    color: red;
+}
+
