@@ -12,6 +12,11 @@ import { getDocs, setDoc, getDoc, collection, addDoc, deleteDoc, doc } from 'fir
 const Dashboard = () => {
   
   // TODO: Separate bloated component into smaller helper components
+  // TODO: When filters are active, and a new expense is added that is not part of the filters, the displayed list wipes ? may have been resolved somehow?
+  // TODO: Sort elements by latest to earliest date
+
+  // MONTH ACCESSES: 1-12 NUMBER
+  // YEAR: NUMBER
 
   const expenseCache = useRef(null);
   /*
@@ -60,10 +65,6 @@ const Dashboard = () => {
   const categories = ["Food", "Gas", "Grocery", "Personal", "Subscriptions"];
   const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"];
   
-
-
-
-
   const cacheExpense = (expenseToCache) => { 
 
     let expenseCacheCopy = null;
@@ -72,7 +73,7 @@ const Dashboard = () => {
       expenseCacheCopy = {};      
     }
     else {
-      expenseCacheCopy = {...expenseCache.current}
+      expenseCacheCopy = expenseCache.current;
     }
     
     const expenseYear = expenseToCache.date.getFullYear();
@@ -84,8 +85,11 @@ const Dashboard = () => {
       const subMonth = subYear[expenseMonth];
       if(subMonth != undefined)
       {
-        expenseCacheCopy[expenseYear][expenseMonth] = [...expenseCacheCopy[expenseYear][expenseMonth], expenseToCache];
-        expenseCache.current = expenseCacheCopy;
+        // this check is in place because there is already a possibility of the element being in the array, and will repopulate because of react strict mode, since this is called by query and that does it twice through strict mode
+        if(!expenseCacheCopy[expenseYear][expenseMonth].some(element => element.docId === expenseToCache.docId)) {
+          expenseCacheCopy[expenseYear][expenseMonth] = [...expenseCacheCopy[expenseYear][expenseMonth], expenseToCache];
+          expenseCache.current = expenseCacheCopy;
+        }
       }
       else
       {
@@ -97,7 +101,7 @@ const Dashboard = () => {
     {
       let subMonth = {}
       subMonth[expenseMonth] = [expenseToCache];
-      console.log(subMonth);
+      
       expenseCacheCopy[expenseYear] = subMonth;
       expenseCache.current = expenseCacheCopy;
     }
@@ -133,60 +137,88 @@ const Dashboard = () => {
 
     if(currentCache[year])
     {
+      console.log("found current year");
       if(currentCache[year][month])
       {
         cacheMonths = [...currentCache[year][month]];
       }
     }
-    console.log("Get expense by month");
+    console.log("!!! CACHE MONTHS");
     console.log(cacheMonths);
     return cacheMonths;
   }
 
-  const removeFromCache = (element) => {
-    console.log("Element to remove from cache");
-    console.log(element);
-    let elementYear = element.date.getFullYear();
-    let elementMonth = element.date.getMonth() + 1;
+  const handleClearYear = () => {
 
-    if(expenseCache.current == null) return [];
+    const expensesFilteredByYear = getExpensesByYearFromCache(new Date().getFullYear());
+    setSelectedMonth(null);
+    setSelectedYear(null);
+    setExpenseList(expensesFilteredByYear);
+    
+  }
 
-    let cacheCopy = {...expenseCache.current};
-    let expensesInCache = []
-    if(cacheCopy[elementYear])
+  const handleClearMonth = () => {
+
+    const expensesFilteredByYear = getExpensesByYearFromCache(selectedYear);
+    setSelectedMonth(null);
+    setExpenseList(expensesFilteredByYear);
+    
+  }
+
+  const deleteFromCache = (expense) => {
+    const expenseDate = expense.date;
+    const expenseYear = expenseDate.getFullYear();
+    const expenseMonth = expenseDate.getMonth() + 1;
+    console.log(expenseDate.getFullYear());
+    let expenseCacheCopy = expenseCache.current;
+
+    if(expenseCacheCopy[expenseYear])
     {
-      if(cacheCopy[elementYear][elementMonth])
+      if(expenseCacheCopy[expenseYear][expenseMonth])
       {
-        expensesInCache = [...cacheCopy[elementYear][elementMonth]];
+        const newArray  = expenseCacheCopy[expenseYear][expenseMonth].filter( element => { return element.docId !== expense.docId });  
+        expenseCacheCopy[expenseYear][expenseMonth] = newArray;
+        // TODO: remove from cache if this is the only element in the whole year
       }
     }
-    else
-    {
-      return;
-    }
     
-    let updatedExpenseCache = expensesInCache.filter( (data) => { return data.docId.toString() !== element.docId.toString() });
-    cacheCopy[elementYear][elementMonth] = updatedExpenseCache;
-    console.log("DELETION: Cache copy");
-    console.log(cacheCopy);
-    expenseCache.current = cacheCopy;
-    console.log("POST ASSIGNMENT");
+    console.log("!!! PRE CACHE DELETION UPDATE")
+    console.log(expenseCache.current);
+
+    expenseCache.current = expenseCacheCopy;
+    
+    console.log("!!! POST CACHE DELETION UPDATE")
     console.log(expenseCache.current);
   }
 
+  const deleteExpense = async (expenseToDelete) => {
+    const expenseYear = new Date(expenseToDelete.date).getFullYear();
+    const docRef = await deleteDoc(doc(db, "expenses", expenseToDelete.userId.toString(), expenseYear.toString(), expenseToDelete.docId.toString()))
+    .then( () => {deleteFromExpenseList(expenseToDelete); deleteFromCache(expenseToDelete)} ).catch( (error) => {console.error(error)});
+  }
 
-  const fetchPost = async (year) => {
-    await getDocs(collection(db, "expenses", user.uid, year))
+  const deleteFromExpenseList = (expense) => {
+    let expenseListCopy = [...expenseList];
+    let updatedExpenseList = expenseListCopy.filter( (data) => { return data.docId !== expense.docId });
+    setExpenseList(updatedExpenseList);
+  }
+
+  
+
+  // queries firebase for entries by year
+  const queryFirebaseByYear = async (year) => {
+    await getDocs(collection(db, "expenses", user.uid, year.toString()))
       .then((querySnapshot)=>{               
           const newData = querySnapshot.docs.map( (doc) => { 
             let documentData = doc.data()
             documentData.date = new Date(documentData.date);
             return {...documentData, docId: doc.id} });
-          newData.forEach( newElement => {
+          newData.forEach( (newElement, index) => {
+            console.log("Query firebase by year caching element " + index);
             cacheExpense(newElement);
           })
-          // const filteredYear = getExpensesByYearFromCache(2024);
-          // setExpenseList(filteredYear);
+          console.log("Post year query printing cache");
+          console.log(expenseCache.current);
       }).catch( (error) => {console.log(error);})
   }
 
@@ -225,17 +257,18 @@ const Dashboard = () => {
       if(!storedYears.includes(year)) {
         const docRef = doc(db, "expenses", user.uid);
         const newYearArray = [...storedYears, year];
+        newYearArray.sort();
+        newYearArray.reverse();
+        setYears(newYearArray);
         updateYearMetadata(newYearArray, docRef);
       }
       else
       {
-        console.log(storedYears);
+        // console.log(storedYears);
       }
 
     } );
 
-    console.log(`IN ADD NEW EXPENSE`)
-    
 
     const docRef = await addDoc(collection(db, "expenses", user.uid, year.toString()), {
       name: expenseItem.name,
@@ -250,19 +283,21 @@ const Dashboard = () => {
       
   }
 
-  const deleteExpense = async (expenseToDelete) => {
-
-    const expenseYear = new Date(expenseToDelete.date).getFullYear();
-    const docRef = await deleteDoc(doc(db, "expenses", expenseToDelete.userId.toString(), expenseYear.toString(), expenseToDelete.docId.toString()))
-    .then( () => {deleteFromExpenseList(expenseToDelete)} ).catch( (error) => {console.error(error)});
-  }
-
-  const deleteFromExpenseList = (expense) => {
-    let expenseListCopy = [...expenseList];
-    let updatedExpenseList = expenseListCopy.filter( (data) => { return data.docId.toString() !== expense.docId.toString() });
-    setExpenseList(updatedExpenseList);
-  }
   
+  
+  /*
+    PAGE LOAD PROCESS:
+
+    get the current year
+    get all posts from the current year
+    store the posts in the cache
+    get the current month
+    set filter for the current year and month
+    
+
+  */
+
+
   useEffect(() => {
     if(user === null)
     {
@@ -270,11 +305,16 @@ const Dashboard = () => {
       navigate("/login");
     }
     else {
-      console.log("Fetching");
-      fetchPost(new Date().getFullYear().toString()).then( () => {
-        const monthList = getExpensesByMonthFromCache(new Date().getFullYear().toString(), new Date().getMonth() + 1);
-        console.log("USEEFFECT MONTH LIST")
-        console.log(monthList);
+
+      // console.log("Fetching");
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth() + 1;
+
+      queryFirebaseByYear(currentYear).then( () => {
+        const monthList = getExpensesByMonthFromCache(currentYear, currentMonth);
+        // console.log("USEEFFECT MONTH LIST")
+        // console.log(monthList);
         setExpenseList(monthList);
       });
       getYearMetaData().then( (yearsList) => {
@@ -284,6 +324,35 @@ const Dashboard = () => {
       })
     }
   },[user])
+
+  const removeFromCache = (element) => {
+    console.log("Element to remove from cache");
+    console.log(element);
+    let elementYear = element.date.getFullYear();
+    let elementMonth = element.date.getMonth() + 1;
+
+    if(expenseCache.current == null) return [];
+
+    let cacheCopy = {...expenseCache.current};
+    let expensesInCache = []
+    if(cacheCopy[elementYear])
+    {
+      if(cacheCopy[elementYear][elementMonth])
+      {
+        expensesInCache = [...cacheCopy[elementYear][elementMonth]];
+      }
+    }
+    else
+    {
+      return;
+    }
+    
+    let updatedExpenseCache = expensesInCache.filter( (data) => { return data.docId.toString() !== element.docId.toString() });
+    cacheCopy[elementYear][elementMonth] = updatedExpenseCache;
+    
+    expenseCache.current = cacheCopy;
+    
+  }
   
   const handleSelectYear = (yearIndex) => {
 
@@ -293,8 +362,8 @@ const Dashboard = () => {
     let expensesFilteredByYear = getExpensesByYearFromCache(yearFromArray);
     if(expensesFilteredByYear.length == 0)
     {
-      console.log("Fethching...");
-      fetchPost(yearFromArray.toString()).then( () => {
+      // console.log("Fethching...");
+      queryFirebaseByYear(yearFromArray.toString()).then( () => {
         expensesFilteredByYear = getExpensesByYearFromCache(yearFromArray);
         setExpenseList(expensesFilteredByYear);
       })
@@ -308,8 +377,8 @@ const Dashboard = () => {
   }
 
   const handleSelectMonth = (monthIndex) => {
-    const activeMonth = months[monthIndex];
-    setSelectedMonth();
+    
+    setSelectedMonth(monthIndex + 1);
     
     const expensesFilteredByYearMonth = getExpensesByMonthFromCache(selectedYear, monthIndex + 1);
     setExpenseList(expensesFilteredByYearMonth);
@@ -320,9 +389,9 @@ const Dashboard = () => {
   const renderYears = () => {
     
     return years.map((element, id) => {
-      console.log("RENDER YEARS");
-      console.log(element);
-      console.log(id);
+      // console.log("RENDER YEARS");
+      // console.log(element);
+      // console.log(id);
       return (
         <div key={id} className='year-entry' onClick={() => handleSelectYear(id)}>
           <span className='year-entry-text'>{element}</span>
@@ -341,58 +410,13 @@ const Dashboard = () => {
     })
   }
 
-  const filterExpensesByYear = async (yearFilter, allYears) => {
-    return await getDoc(doc(db, "expenses", user.uid)).then( (querySnapshot) => {              
-          const metadataYears = querySnapshot.data().metadata_years;
-
-          let filteredExpenseList = [];
-          metadataYears.forEach( async (year) => {
-            
-            if(year === yearFilter || allYears)
-            {
-              await getDocs(collection(db, "expenses", user.uid, year.toString())).then( (docsResult) => {
-                
-                docsResult.forEach( (doc) => {
-                  filteredExpenseList.push({...doc.data(), docId: doc.id});
-                });
-  
-              }).then( () => {console.log(filteredExpenseList); setExpenseList(filteredExpenseList)})
-              
-            }
-            
-          })
-          
-
-    }).catch( (error) => {console.log(error);})
+  const sortExpenseList = () => {
+    let expenseListCopy = expenseList;
+    expenseListCopy.sort( (a, b) => {
+      return new Date(b.date) - new Date(a.date);
+    });
     
-  }
-
-  const filterExpensesByMonth = (monthFilter, allMonths) => {
-    let monthFilteredExpenses = expenseList.filter( (element, id) => {
-      if(new Date(element.date).getMonth() === monthFilter || allMonths) return element;
-    })
-    setExpenseList(monthFilteredExpenses);
-  }
-
-
-  
-
-
-  const handleClearYear = () => {
-
-    const expensesFilteredByYear = getExpensesByYearFromCache(new Date().getFullYear());
-    setSelectedMonth(null);
-    setSelectedYear(null);
-    setExpenseList(expensesFilteredByYear);
-    
-  }
-
-  const handleClearMonth = () => {
-
-    const expensesFilteredByYear = getExpensesByYearFromCache(selectedYear);
-    setSelectedMonth(null);
-    setExpenseList(expensesFilteredByYear);
-    
+    return expenseListCopy;
   }
 
   const renderListItems = () => {
@@ -400,7 +424,10 @@ const Dashboard = () => {
     console.log("Rendering...");
     console.log("Current list: ")
     console.log(expenseList);
-    return expenseList.map((element, id) => {
+
+    const sortedExpenseList = sortExpenseList();
+
+    return sortedExpenseList.map((element, id) => {
       let elementDate = new Date(element.date)
       return( 
         <div key={id} className="element">
@@ -499,6 +526,28 @@ const Dashboard = () => {
       </div>
     </div>
   )
+
+
+
+
+  
+
+  
+
+
+  // const filterExpensesByMonth = (monthFilter, allMonths) => {
+  //   let monthFilteredExpenses = expenseList.filter( (element, id) => {
+  //     if(new Date(element.date).getMonth() === monthFilter || allMonths) return element;
+  //   })
+  //   setExpenseList(monthFilteredExpenses);
+  // }
+
+
+  
+
+
+  
+
 }
 
 export default Dashboard;
