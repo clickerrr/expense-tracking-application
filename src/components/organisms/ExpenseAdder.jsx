@@ -17,7 +17,9 @@ const ExpenseAdder = ({onClose, addNewExpense}) => {
             return;
         }
         setErrorText("");
-            
+        
+        console.log("ADDING NEW EXPENSE IN EXPENSE ADDER");
+        console.log(date);
         const newExpense = {name: name, amount: amount, category: category, date: date};
         console.log(newExpense);
         addNewExpense(newExpense);
@@ -36,7 +38,7 @@ const ExpenseAdder = ({onClose, addNewExpense}) => {
                 <label htmlFor="category">Category</label>
                 <input onChange={(event) => {setCategory(event.target.value)}} type="text" className="form-input" name="category" value={category} placeholder="Category"></input>
                 <label htmlFor="date">Date</label>
-                <input onChange={(event) => {setDateDisplay(event.target.value), setDate(new Date(event.target.value))}} type="date" className="form-input" name="date" value={dateDisplay}></input>
+                <input onChange={(event) => {setDateDisplay(event.target.value), console.log(event.target.value), setDate(new Date(event.target.value + "T00:00:00"))}} type="date" className="form-input" name="date" value={dateDisplay}></input>
                 <label>{errorText}</label>
                 <button onClick={() => addExpense()}>Submit</button>
             </div>
