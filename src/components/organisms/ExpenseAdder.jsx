@@ -1,15 +1,35 @@
-import { useState } from "react";
 import "../../styles/expenseAdder.css";
+import { useEffect, useState } from "react";
 
-const ExpenseAdder = ({onClose, addNewExpense}) => {
-
+const ExpenseAdder = ({onClose, onSubmitExpense, documentToEdit}) => {
+    
     const [name, setName] = useState("");
     const [amount, setAmount] = useState(0);
     const [category, setCategory] = useState("");
     const [date, setDate] = useState(new Date());
     const [dateDisplay, setDateDisplay] = useState("");
     const [errorText, setErrorText] = useState("");
-    
+
+    useEffect( () => {
+
+        if(documentToEdit) {
+            console.log("Editing element");
+            const docId = documentToEdit.docId;
+            if(docId) {
+                
+                const currentName = documentToEdit.name;
+                const currentAmount = documentToEdit.amount;
+                const currentCat = documentToEdit.category;
+                const currentDate = new Date(documentToEdit.date);
+
+                currentName ? setName(currentName) : setName("");
+                currentAmount ? setAmount(currentAmount) : setAmount(0);
+                currentCat ? setCategory(currentCat) : setCategory("");
+                currentDate ? (setDate(currentDate), setDateDisplay(currentDate.toISOString().substring(0,10))) : (null);
+            }
+        }
+ 
+    }, [])
 
     const addExpense = () => {
         if((amount === null || amount <= 0)) {
@@ -17,18 +37,31 @@ const ExpenseAdder = ({onClose, addNewExpense}) => {
             return;
         }
         setErrorText("");
+
+        if(documentToEdit) {
+            if(documentToEdit.docId)
+            {
+                console.log("Passing edited document");
+                const editedDocument = {name: name, amount: amount, category: category, date: date, userId: documentToEdit.userId, docId: documentToEdit.docId};
+                onClose();
+                onSubmitExpense(documentToEdit, editedDocument);
+                return;
+            }
+        }
         
         console.log("ADDING NEW EXPENSE IN EXPENSE ADDER");
         console.log(date);
-        const newExpense = {name: name, amount: amount, category: category, date: date};
+        const newExpense = {docId: null, name: name, amount: amount, category: category, date: date, userId: null};
         console.log(newExpense);
-        addNewExpense(newExpense);
+        
+        onClose();
+        onSubmitExpense(newExpense);
     }
 
     return (
         <div className="adder-parent">
             <div className="adder-header">
-                <button className="close-button" onClick={onClose}>X</button>
+                <button className="close-button" onClick={() => {console.log(onClose); onClose()}}>X</button>
             </div>
             <div className="adder-container">
                 <label htmlFor="name">Name</label>
