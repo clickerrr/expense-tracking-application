@@ -1,120 +1,46 @@
-.expense-list-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.dashboard-title {
+	padding-left: 10px;
 }
 
-.header-button-row {
-    display: flex;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    justify-content: flex-end;
-    align-items: center;
-    width: 60%;
+.central-dashboard {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
 }
 
-.header-button-row div {
-    margin-right: 5%;
-    display: flex;
-    width: auto;
+.right-dashboard {
+	display: flex;
+	flex-direction: column;
+	width: 25%;
 }
 
-.expense-list-header {
-    display: flex;
-    width: 50%;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+/* Styles for small screens (mobile) */
+
+@media (max-width: 480px) {
+	.central-dashboard {
+		flex-direction: column;
+		align-items: center;
+	}
+	.right-dashboard {
+		width: 100%;
+		align-items: center;
+	}
 }
 
-.list-of-expenses {     
-    height: 75vh;
-    width: 50%;
-    overflow-y: scroll;
-    padding-right: 5%;
-    padding-left: 5%;
+/* Styles for medium screens (tablets) */
+
+@media (min-width: 481px) and (max-width: 768px) {
+	.central-dashboard {
+		flex-direction: column;
+		align-items: center;
+	}
+	.right-dashboard {
+		width: 100%;
+		align-items: center;
+	}
 }
 
-.element {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin-bottom: 2px;
-    border-bottom: 2px solid gray;
-}
+/* Styles for large screens (desktops) */
 
-.expense-name {
-    width: 20%;
-    padding-left: 1%;
-    padding-right: 1%;
-    text-wrap: wrap;
-}
-
-
-.expense-content {
-    width: 40%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.edit-delete {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 10%;
-}
-
-.year-dropdown {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
-
-.year-content {
-    position: absolute;
-    flex-direction: column;
-    top: 100%;
-    z-index: 1;
-    background-color: white;
-}
-
-.year-entry {
-    padding: 15px;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    border-bottom: 1px solid gray;
-}
-
-.year-entry:hover {
-    cursor: pointer;
-    background-color: gray;
-}
-
-.year-entry-text {
-    padding-left: 5px;
-    padding-right: 5px;
-}
-
-.edit-delete {
-    justify-content: space-between;
-    padding-left: 1%;
-    padding-right: 1%;
-}
-
-.edit-logo {
-    margin-right: 10px;
-}
-
-.edit-logo img {
-    object-position: center;
-    object-fit: contain;
-    width: 25px;
-    height: 25px;
+@media (min-width: 769px) {
 }

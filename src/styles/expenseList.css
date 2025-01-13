@@ -1,0 +1,173 @@
+.expense-container {
+	display: flex;
+	flex-direction: column;
+	width: 50%;
+	justify-content: center;
+	justify-self: center;
+}
+
+.expense-title {
+	font-weight: bold;
+}
+
+.expense-list-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+}
+
+.expense-list-header span {
+	width: 20%;
+	text-align: center;
+}
+
+.expense-list {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	overflow-y: scroll;
+	height: 500px;
+	margin-top: 10px;
+}
+
+.expense-list .item {
+	background-color: rgb(0, 0, 0, 0.2);
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	margin-top: 2%;
+	margin-bottom: 2%;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-wrap: wrap;
+}
+
+.item .text {
+	text-align: center;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.item .grow {
+	flex-grow: 2;
+}
+
+.edit-logo {
+	margin-right: 10px;
+	min-width: 5%;
+	width: 5%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.edit-logo img {
+	object-position: center;
+	object-fit: contain;
+	min-width: 20px;
+	min-height: 20px;
+	width: 20px;
+	height: 20px;
+}
+
+.expense-filters {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.expense-filters .filter {
+	cursor: pointer;
+	background-color: gray;
+	margin-left: 10px;
+	margin-right: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border-radius: 10px;
+	transition: all 0.15s ease-in-out;
+}
+
+.expense-filters .filter:hover {
+	background-color: lightgray;
+}
+
+.expense-filters .filter span {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.year-dropdown {
+	position: fixed;
+	display: flex;
+	flex-direction: column;
+	background-color: white;
+	width: 50px;
+	overflow-x: hidden;
+}
+
+.year-dropdown .item {
+	justify-content: center;
+	text-align: center;
+	background-color: green;
+	padding: 5px;
+}
+
+.year-dropdown .item:hover {
+	cursor: pointer;
+	background-color: gray;
+}
+
+.month-dropdown {
+	position: fixed;
+	display: flex;
+	flex-direction: column;
+	background-color: white;
+	width: 50px;
+	overflow-x: hidden;
+}
+
+.month-dropdown .item {
+	justify-content: center;
+	text-align: center;
+	background-color: green;
+	padding: 5px;
+}
+
+.month-dropdown .item:hover {
+	cursor: pointer;
+	background-color: gray;
+}
+
+.red-text {
+	color: red;
+}
+
+.new-expense-button {
+	width: 25%;
+	justify-self: center;
+	align-self: center;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+/* Styles for small screens (mobile) */
+@media (max-width: 480px) {
+	.expense-container {
+		width: 95%;
+	}
+}
+
+/* Styles for medium screens (tablets) */
+@media (min-width: 481px) and (max-width: 768px) {
+	.expense-container {
+		width: 85%;
+	}
+}
+
+/* Styles for large screens (desktops) */
+@media (min-width: 769px) {
+}

@@ -1,0 +1,107 @@
+.category-container {
+	display: flex;
+	flex-direction: column;
+	border-color: rgba(128, 128, 128, 0.5);
+	border-width: 2px;
+	border-style: solid;
+	border-radius: 10px;
+	max-height: 50%;
+	padding-bottom: 5%;
+	z-index: 1;
+
+	background-color: rgba(68, 68, 68, 0.2);
+}
+
+.title-container .title {
+	flex-shrink: 2;
+}
+
+.title-container {
+	background-color: rgba(229, 229, 229, 0.5);
+	border-top-right-radius: 8px;
+	border-top-left-radius: 8px;
+	border-width: 2px;
+	z-index: 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	padding: 10px;
+	/* background-color: blue; */
+}
+
+.title-container button {
+	display: flex;
+	background-color: gray;
+	border: none;
+	cursor: pointer;
+	transition: background-color 0.15s ease-in-out;
+	height: 35%;
+	justify-content: center;
+	align-items: center;
+	margin-right: 10px;
+	padding: 15px;
+	border-radius: 10px;
+	font-weight: bold;
+	color: rgba(0, 0, 0, 0.5);
+}
+
+.title-container button:hover {
+	background-color: darkgray;
+}
+
+.category-list {
+	min-height: 300px;
+	max-height: 50%;
+	overflow-y: scroll;
+}
+
+.category-item {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px;
+	margin-bottom: 10px;
+	background-color: rgba(66, 66, 66, 0.2);
+	flex-wrap: wrap;
+}
+
+.category-item .button-group {
+	justify-self: flex-end;
+	align-self: flex-end;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	justify-content: space-between;
+	display: flex;
+	flex-direction: row;
+}
+
+.button-group button {
+	margin-right: 10px;
+}
+
+.category-item .title {
+	font-weight: bold;
+	flex-grow: 2;
+	margin-right: 10px;
+}
+
+/* Styles for small screens (mobile) */
+@media (max-width: 480px) {
+	.category-container {
+		width: 95%;
+	}
+}
+
+/* Styles for medium screens (tablets) */
+@media (min-width: 481px) and (max-width: 768px) {
+	.category-container {
+		width: 80%;
+	}
+}
+
+/* Styles for large screens (desktops) */
+@media (min-width: 769px) {
+}

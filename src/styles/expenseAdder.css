@@ -1,45 +1,71 @@
 .adder-parent {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    top: 50%;
-    left: 50%;
-    width: 15vw;
-    transform: translate(-50%, -50%);
-    color: white; background: #666666;
-    
-    z-index: 1000;
-    padding: 10px;
+	position: fixed;
+	display: flex;
+	flex-direction: column;
+	top: 50%;
+	left: 50%;
+	width: 20%;
+	transform: translate(-50%, -50%);
+	color: white;
+	background: #666666;
+
+	z-index: 1000;
+	padding: 10px;
 }
 
 .adder-header {
-    background-color: green;
-    display: flex;
-    flex-direction: row-reverse;
-    padding: 1%;
+	background-color: green;
+	display: flex;
+	flex-direction: row;
+	padding-right: 2%;
+	padding-left: 2%;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.close-button {
+	height: 10%;
+	width: auto;
 }
 
 .adder-container {
-    background-color: purple;
-    display: flex;
-    flex-direction: column;
+	background-color: purple;
+	display: flex;
+	flex-direction: column;
 }
 
-.adder-container input { 
-    margin: 10px;
+.adder-container .form-input {
+	margin: 10px;
 }
 
 .adder-container label {
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 5px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 5px;
 }
 
 .adder-container button {
-    margin: 10px;
+	margin: 10px;
 }
 
 .red-text {
-    color: red;
+	color: red;
 }
 
+/* Styles for small screens (mobile) */
+@media (max-width: 480px) {
+	.adder-parent {
+		width: 80%;
+	}
+}
+
+/* Styles for medium screens (tablets) */
+@media (min-width: 481px) and (max-width: 768px) {
+	.adder-parent {
+		width: 50%;
+	}
+}
+
+/* Styles for large screens (desktops) */
+@media (min-width: 769px) {
+}
