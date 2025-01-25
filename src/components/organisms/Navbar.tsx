@@ -11,6 +11,9 @@ const Navbar = () => {
 			<NavLink className={`nav-item`} to="/metrics">
 				Metrics
 			</NavLink>
+			<NavLink className={`nav-item`} to="/budgeting">
+				Budgeting
+			</NavLink>
 		</div>
 	);
 };

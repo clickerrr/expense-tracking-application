@@ -1,0 +1,110 @@
+.budget-details-parent {
+	/* background-color: blue; */
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.budget-details-container {
+	display: flex;
+	width: 60%;
+	justify-content: center;
+	align-items: center;
+	/* background-color: green; */
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.budget-details-header {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	align-items: center;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+
+.balance-overview-container {
+	display: flex;
+	flex-direction: column;
+	/* background-color: blue; */
+}
+.balance-overview-container * {
+	margin-bottom: 0.2em;
+
+	padding: 0.2em;
+}
+
+.balance-overview * {
+	/* margin-bottom: 0.2em; */
+	background-color: rgba(255, 196, 0, 0.236);
+}
+
+.green-value {
+	color: green;
+}
+
+.green-background {
+	background-color: green;
+	color: white;
+}
+
+.yellow-value {
+	color: rgb(160, 160, 0);
+}
+
+.red-value {
+	color: rgb(157, 0, 0);
+}
+
+.savings-movement-pane {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: rgb(205, 205, 205);
+	width: auto;
+	height: 20%;
+	padding: 3em;
+	margin: 1em;
+}
+.pane-title {
+	font-size: 1.6rem;
+	font-weight: bold;
+	margin-bottom: 0.1em;
+}
+
+.savings-movement-pane .details {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 1em;
+}
+.savings-highlight-text {
+	font-size: 1.5rem;
+	font-weight: bold;
+	padding: 0.3em 0.75em 0.25em 0.75em;
+}
+.savings-subtext {
+	font-size: 1rem;
+
+	padding: 0.5em 1em 0.5em 1em;
+}
+
+.expenses-pane {
+	margin: 1em;
+	width: auto;
+	height: 20%;
+	padding-top: 3em;
+	padding-bottom: 3em;
+	padding-left: 1em;
+	padding-right: 1em;
+	background-color: gray;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
+}

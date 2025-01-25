@@ -1,20 +1,29 @@
 .adder-parent {
 	position: fixed;
 	display: flex;
-	flex-direction: column;
-	top: 50%;
-	left: 50%;
-	width: 20%;
-	transform: translate(-50%, -50%);
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 	color: white;
-	background: #666666;
+	background-color: #66666683;
 
 	z-index: 1000;
 	padding: 10px;
 }
 
+.adder-container {
+	width: 20%;
+	background: linear-gradient(45deg, rgb(54, 54, 54), rgb(70, 70, 70));
+	padding: 0.5em;
+	border-radius: 0.3em;
+}
+
 .adder-header {
-	background-color: green;
+	background-color: rgba(0, 255, 0, 0.412);
 	display: flex;
 	flex-direction: row;
 	padding-right: 2%;
@@ -28,40 +37,60 @@
 	width: auto;
 }
 
-.adder-container {
-	background-color: purple;
+.adder-content {
+	background-color: transparent;
 	display: flex;
 	flex-direction: column;
+	font-size: 1rem;
 }
 
-.adder-container .form-input {
-	margin: 10px;
+.adder-content .form-input {
+	margin: 1em;
+	font-size: 0.9rem;
+	background: none;
+	border: 0;
+	outline: none;
+	padding: 0.5em;
+	color: white;
 }
 
-.adder-container label {
+.adder-content .form-input::placeholder {
+	color: rgba(255, 255, 255, 0.572);
+}
+
+.adder-content .form-input:focus {
+	border-bottom: rgb(22, 96, 255) 2px solid;
+}
+
+.adder-content label {
 	margin-left: 10px;
 	margin-right: 10px;
 	margin-top: 5px;
 }
 
-.adder-container button {
+.adder-content button {
 	margin: 10px;
 }
 
 .red-text {
-	color: red;
+	color: rgb(255, 0, 0);
+}
+
+.important-notice {
+	color: rgb(221, 86, 255);
+	font-size: 0.8rem;
 }
 
 /* Styles for small screens (mobile) */
 @media (max-width: 480px) {
-	.adder-parent {
+	.adder-container {
 		width: 80%;
 	}
 }
 
 /* Styles for medium screens (tablets) */
 @media (min-width: 481px) and (max-width: 768px) {
-	.adder-parent {
+	.adder-container {
 		width: 50%;
 	}
 }

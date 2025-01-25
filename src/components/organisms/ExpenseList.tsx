@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
 import Expense from '../../types/Expense';
 import '../../styles/expenseList.css';
-import editLogo from '../../assets/edit-icon.svg';
-import trashLogo from '../../assets/trash-icon.svg';
+import sortIcon from '../../assets/sort-icon.svg';
 import ExpenseForm from './ExpenseForm';
 import ExpenseListContext from '../context/ExpenseContext';
+import CategoryListContext from '../context/CategoryListContext';
+import ExpenseListElement from '../atoms/ExpenseListElement';
 
 const ExpenseListView = () => {
 	const monthList: string[] = [
@@ -23,8 +24,9 @@ const ExpenseListView = () => {
 	];
 
 	const expenseContext = useContext(ExpenseListContext);
+	const categoryContext = useContext(CategoryListContext);
 
-	const [expenses, setExpenses] = useState<Expense[]>([]);
+	// const [expenses, setExpenses] = useState<Expense[]>([]);
 	const [filteredList, setFilteredList] = useState<Expense[]>([]);
 	const [yearFilter, setYearFilter] = useState<number>(new Date().getFullYear());
 	const [monthFilter, setMonthFilter] = useState<number | null>(null);
@@ -39,17 +41,23 @@ const ExpenseListView = () => {
 	const [expenseEditorShowing, setExpenseEditorShowing] = useState<boolean>(false);
 	const [expenseToEdit, setExpenseToEdit] = useState<Expense | undefined>(undefined);
 
+	const [totalAmountSpent, setTotalAmountSpent] = useState<number>(0);
+
+	const [filterAscending, setFilterAscending] = useState<boolean>(true);
+
+	const [deleteMode, setDeleteMode] = useState<boolean>(false);
+
 	useEffect(() => {
-		setExpenses([]);
+		// setExpenses([]);
 		setAvailableYears([]);
 		setFilteredList([]);
-		if (expenseContext !== undefined) {
+		if (expenseContext !== undefined && categoryContext !== undefined) {
 			const yearsList = populateAvailableYears(expenseContext.expenseList);
 			setAvailableYears(yearsList);
-			setExpenses(expenseContext.expenseList);
+			// setExpenses(expenseContext.expenseList);
 			setFilteredList(filterList(yearFilter, monthFilter, expenseContext.expenseList));
 		}
-	}, [expenseContext]);
+	}, [expenseContext, categoryContext]);
 
 	const populateAvailableYears = (listToParse: Expense[] | null): number[] => {
 		if (listToParse === null) return [];
@@ -69,28 +77,14 @@ const ExpenseListView = () => {
 
 		return filteredList.map((element: Expense, index: number) => {
 			return (
-				<div className="item" key={index}>
-					<span className="text grow">{element.name}</span>
-					<span className="text">{element.date.toLocaleDateString('en-us')}</span>
-					<span className="text">{element.category.title}</span>
-					<span className="text">${element.amount}</span>
-					<button
-						onClick={() => {
-							handleUpdateExpense(index);
-						}}
-						className="edit-logo"
-					>
-						<img src={editLogo} />
-					</button>
-					<button
-						onClick={() => {
-							handleDeleteExpense(element);
-						}}
-						className="edit-logo"
-					>
-						<img src={trashLogo} />
-					</button>
-				</div>
+				<ExpenseListElement
+					key={index}
+					element={element}
+					handleUpdateExpense={handleUpdateExpense}
+					handleDeleteExpense={handleDeleteExpense}
+					deleteMode={deleteMode}
+					index={index}
+				/>
 			);
 		});
 	};
@@ -100,35 +94,29 @@ const ExpenseListView = () => {
 		monthFilter: number | null,
 		list: Expense[] | null
 	): Expense[] => {
-		if (list === null || list === undefined) list = expenses;
+		if (list === null || list === undefined) list = [];
 		if (yearFilter === null) return list;
 
 		const newList: Expense[] = [];
 
-		list?.forEach((element: Expense) => {
-			console.log('element date month', element.date.getMonth());
-			console.log('monthFilter', monthFilter);
-			console.log(
-				'element.date.getMonth() === monthFilter',
-				element.date.getMonth() === monthFilter
-			);
+		list.forEach((element: Expense) => {
 			const yearMatch = element.date.getFullYear() === yearFilter;
 
 			const monthMatch =
 				monthFilter !== null ? element.date.getMonth() === monthFilter : true;
-			console.log('monthMatch', monthMatch);
 			if (yearMatch && monthMatch) {
 				newList.push(element);
 			}
 		});
-
-		return sortList(newList, true);
+		const totalSpent = calculateTotalAmountSpent(newList);
+		setTotalAmountSpent(totalSpent);
+		return sortList(newList);
 	};
 
-	const sortList = (list: Expense[] | null, ascending: boolean) => {
+	const sortList = (list: Expense[] | null) => {
 		if (list === null) return [];
 		const returnedList = list.sort((a, b) => {
-			return ascending
+			return filterAscending
 				? new Date(a.date) - new Date(b.date)
 				: new Date(b.date) - new Date(a.date);
 		});
@@ -144,20 +132,40 @@ const ExpenseListView = () => {
 	};
 
 	const resetYearFilter = () => {
+		if (expenseContext === null || expenseContext === undefined) {
+			setYearFilter(new Date().getFullYear());
+			setFilteredList([]);
+			return;
+		}
 		setYearFilter(new Date().getFullYear());
-		setFilteredList(filterList(new Date().getFullYear(), monthFilter, expenses));
+		setFilteredList(
+			filterList(new Date().getFullYear(), monthFilter, expenseContext.expenseList)
+		);
 	};
 
 	const resetMonthFilter = () => {
+		if (expenseContext === null || expenseContext === undefined) {
+			setMonthFilter(null);
+			setFilteredList([]);
+			return;
+		}
 		setMonthFilter(null);
-		setFilteredList(filterList(yearFilter, null, expenses));
+		setFilteredList(filterList(yearFilter, null, expenseContext.expenseList));
 	};
 
 	const addNewExpense = (newExpense: Expense) => {
-		newExpense.id = expenses!.length + 1;
-		expenses !== null ? setExpenses([...expenses, newExpense]) : setExpenses([newExpense]);
+		if (expenseContext === undefined || expenseContext === null) {
+			return;
+		}
+		newExpense.id = expenseContext.expenseList.length + 1;
+		expenseContext.expenseList !== null
+			? expenseContext.updateExpenseList([...expenseContext.expenseList, newExpense])
+			: expenseContext.updateExpenseList([newExpense]);
 
-		const returnFilteredList = filterList(yearFilter, monthFilter, [...expenses, newExpense]);
+		const returnFilteredList = filterList(yearFilter, monthFilter, [
+			...expenseContext.expenseList,
+			newExpense,
+		]);
 		setFilteredList(returnFilteredList);
 		addNewExpenseRemote(newExpense);
 	};
@@ -190,8 +198,9 @@ const ExpenseListView = () => {
 	};
 
 	const handleUpdateExpense = (index: number) => {
+		if (expenseContext === undefined || expenseContext === null) return;
 		console.log('index', index);
-		if (expenses !== null) {
+		if (expenseContext.expenseList !== null) {
 			setExpenseToEdit(filteredList[index]);
 
 			if (
@@ -208,16 +217,19 @@ const ExpenseListView = () => {
 	};
 
 	const handleDeleteExpense = (expenseToDelete: Expense) => {
+		if (expenseContext === undefined || expenseContext.expenseList === null) return;
+
 		const deletedFromFilterList = filteredList.filter((value) => {
 			return value.id !== expenseToDelete.id;
 		});
 
-		const deletedFromExpenseList = expenses.filter((value) => {
+		const deletedFromExpenseList = expenseContext.expenseList.filter((value) => {
 			return value.id !== expenseToDelete.id;
 		});
 
+		setTotalAmountSpent(calculateTotalAmountSpent(deletedFromFilterList));
 		setFilteredList(deletedFromFilterList);
-		setExpenses(deletedFromExpenseList);
+		expenseContext.updateExpenseList(deletedFromExpenseList);
 		handleDeleteExpenseRemote(expenseToDelete);
 	};
 
@@ -237,18 +249,55 @@ const ExpenseListView = () => {
 	};
 
 	const updateExpense = (updatedExpense: Expense) => {
+		if (expenseContext === undefined || expenseContext.expenseList === null) return;
+
 		const foundExpense = filteredList?.find((expense) => {
 			return expense.id === updatedExpense.id;
 		});
 
 		if (foundExpense === null || foundExpense === undefined) return;
-
+		console.log('updatedExpense', updatedExpense);
 		foundExpense.amount = updatedExpense.amount;
 		foundExpense.category = updatedExpense.category;
 		foundExpense.date = updatedExpense.date;
 		foundExpense.name = updatedExpense.name;
-		const returnFilteredList = filterList(yearFilter, monthFilter, expenses);
+		const returnFilteredList = filterList(yearFilter, monthFilter, expenseContext.expenseList);
 		setFilteredList(returnFilteredList);
+		// console.log('updatedExpense', updatedExpense);
+		updateExpenseRemote(updatedExpense);
+	};
+
+	const updateExpenseRemote = (updatedExpense: Expense) => {
+		const requestHeaders = new Headers();
+		requestHeaders.append('Content-Type', 'application/json');
+
+		fetch(`http://127.0.0.1:3000/expense/id/${updatedExpense.id}`, {
+			body: JSON.stringify({
+				name: updatedExpense.name,
+				amount: Number(updatedExpense.amount),
+				date: new Date(updatedExpense.date).toISOString(),
+				category: Number(updatedExpense.category.id),
+			}),
+			method: 'PATCH',
+			headers: requestHeaders,
+		})
+			.then((response) => {
+				return response.json();
+			})
+			.then((result) => {
+				console.log(result);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	};
+
+	const calculateTotalAmountSpent = (list: Expense[]) => {
+		let sum = 0;
+		list.forEach((expense: Expense) => {
+			sum += expense.amount;
+		});
+		return Number(sum.toFixed(2));
 	};
 
 	return (
@@ -283,10 +332,13 @@ const ExpenseListView = () => {
 										setYearDropdownVisible(
 											(yearDropdownVisible) => !yearDropdownVisible
 										);
+
+										if (expenseContext === undefined || expenseContext === null)
+											return;
 										const filteredList = filterList(
 											year,
 											monthFilter,
-											expenses
+											expenseContext.expenseList
 										);
 										setFilteredList(filteredList);
 									}}
@@ -312,10 +364,12 @@ const ExpenseListView = () => {
 										setMonthDropdownVisible(
 											(monthDropdownVisible) => !monthDropdownVisible
 										);
+										if (expenseContext === undefined || expenseContext === null)
+											return;
 										const filteredList = filterList(
 											yearFilter,
 											index,
-											expenses
+											expenseContext.expenseList
 										);
 										setFilteredList(filteredList);
 									}}
@@ -331,22 +385,51 @@ const ExpenseListView = () => {
 			</div>
 			<div className="expense-list-header">
 				<span>Expense Name</span>
-				<span>Expense Date</span>
+				<div
+					className="date-container"
+					onClick={() => {
+						setFilterAscending((filterAscending) => !filterAscending);
+						sortList(filteredList);
+					}}
+				>
+					<span>Expense Date</span>
+					<img
+						src={sortIcon}
+						className={`sort-icon ${filterAscending ? 'rotate-icon' : ''}`}
+					/>
+				</div>
 				<span>Expense Category</span>
 				<span>Amount</span>
 				<span>Options</span>
 			</div>
 			<div className="expense-list">{renderList()}</div>
 
-			<button
-				onClick={() => {
-					setExpenseEditorShowing(false);
-					setExpenseAdderShowing(true);
-				}}
-				className="new-expense-button"
-			>
-				Add New Expense
-			</button>
+			<div className="total-amount-container">
+				<span>Total Spent: ${totalAmountSpent}</span>
+			</div>
+			<div className="bottom-container">
+				<button
+					onClick={() => {
+						setExpenseEditorShowing(false);
+						setExpenseAdderShowing(true);
+					}}
+					className="new-expense-button"
+				>
+					Add New Expense
+				</button>
+				<div className="delete-mode-container">
+					<label htmlFor="delete-mode-toggler">Delete Mode</label>
+					<input
+						id="delete-mode-toggler"
+						type="checkbox"
+						name="Delete Mode"
+						onChange={() => {
+							setDeleteMode((deleteMode) => !deleteMode);
+						}}
+					></input>
+				</div>
+			</div>
+
 			{expenseAdderShowing ? (
 				<ExpenseForm
 					onClose={() =>

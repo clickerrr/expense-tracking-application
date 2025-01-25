@@ -46,35 +46,46 @@ const ExpenseForm = ({ onClose, onSubmitExpense, documentToEdit }: ExpenseAdderP
 			setCategory('');
 			setDateDisplay('');
 		}
-	}, [documentToEdit]);
 
-	useEffect(() => {
-		setCategory('');
 		if (categoryContext === undefined) {
 			setCategoryList([]);
 		} else {
 			setCategoryList(categoryContext.categoryList);
 			if (categoryContext.categoryList.length !== 0) {
-				setCategory(categoryContext.categoryList[0].title);
+				setCategory(categoryContext.categoryList[2].title);
+				console.log('category set', categoryContext.categoryList[2].title);
 			}
 		}
-	}, [categoryContext]);
+	}, [documentToEdit, categoryContext]);
 
 	const addExpense = () => {
+		console.log('[ADDING EXPENSE] expense title', category);
 		if (amount === null || amount <= 0) {
 			setErrorText('Please enter a valid positive number');
 			return;
 		}
 		setErrorText('');
 
+		const foundCategory = categoryList.find((element: Category) => {
+			return element.title === category;
+		});
+		const categoryData: Category = {
+			id: foundCategory ? foundCategory.id : -1,
+			title: foundCategory ? foundCategory.title : '',
+			removable: true,
+			editable: true,
+			color: foundCategory ? foundCategory.color : '#ffffff',
+		};
+
 		if (documentToEdit !== null && documentToEdit !== undefined) {
 			if (documentToEdit.id) {
 				console.log('Passing edited document');
+
 				const editedDocument: Expense = {
 					id: documentToEdit.id,
 					name: name,
 					amount: amount,
-					category: { id: 1, title: category },
+					category: categoryData,
 					date: date,
 				};
 				onClose();
@@ -83,12 +94,6 @@ const ExpenseForm = ({ onClose, onSubmitExpense, documentToEdit }: ExpenseAdderP
 			}
 		}
 
-		console.log('ADDING NEW EXPENSE IN EXPENSE ADDER');
-		console.log(date);
-		const categoryData: Category = {
-			id: 1,
-			title: category,
-		};
 		const newExpense: Expense = {
 			id: -1,
 			name: name,
@@ -104,80 +109,82 @@ const ExpenseForm = ({ onClose, onSubmitExpense, documentToEdit }: ExpenseAdderP
 
 	return (
 		<div className="adder-parent">
-			<div className="adder-header">
-				<h3 className="header-title">
-					{documentToEdit !== undefined && documentToEdit !== null
-						? 'Expense Editor'
-						: 'Expense Adder'}
-				</h3>
-				<button
-					className="close-button"
-					onClick={() => {
-						console.log(onClose);
-						onClose();
-					}}
-				>
-					X
-				</button>
-			</div>
 			<div className="adder-container">
-				<label htmlFor="name">Name</label>
-				<input
-					onChange={(event) => {
-						setName(event.target.value);
-					}}
-					type="text"
-					className="form-input"
-					name="name"
-					value={name}
-					placeholder="Name"
-				></input>
-				<label htmlFor="amount">
-					Amount<span className="red-text">*</span>
-				</label>
-				<input
-					onChange={(event) => {
-						setAmount(Number(event.target.value));
-					}}
-					type="number"
-					className="form-input"
-					name="amount"
-					value={amount}
-					placeholder="Amount"
-				></input>
-				<label htmlFor="category">Category</label>
-				<select
-					className="form-input"
-					onChange={(event) => {
-						setCategory(event.target.value);
-					}}
-				>
-					{categoryList.map((element: Category) => {
-						return (
-							<option key={element.id} value={element.title}>
-								{element.title}
-							</option>
-						);
-					})}
-				</select>
-				{/* <input onChange={(event) => {setCategory(event.target.value)}} type="text" className="form-input" name="category" value={category} placeholder="Category"></input> */}
-				<label htmlFor="date">Date</label>
-				<input
-					onChange={(event) => {
-						setDateDisplay(event.target.value),
-							console.log(event.target.value),
-							setDate(new Date(event.target.value + 'T00:00:00'));
-					}}
-					type="date"
-					className="form-input"
-					name="date"
-					value={dateDisplay}
-				></input>
-				<label>{errorText}</label>
-				<button onClick={() => addExpense()}>Submit</button>
-			</div>
-			<div>
-				<span>* signify required fields</span>
+				<div className="adder-header">
+					<h3 className="header-title">
+						{documentToEdit !== undefined && documentToEdit !== null
+							? 'Expense Editor'
+							: 'Expense Adder'}
+					</h3>
+					<button
+						className="close-button"
+						onClick={() => {
+							onClose();
+						}}
+					>
+						X
+					</button>
+				</div>
+				<div className="adder-content">
+					<label htmlFor="name">Expense Name</label>
+					<input
+						onChange={(event) => {
+							setName(event.target.value);
+						}}
+						type="text"
+						className="form-input"
+						name="name"
+						value={name}
+						placeholder="Enter name here..."
+					></input>
+					<label htmlFor="amount">
+						Expense Amount<span className="red-text">*</span>
+					</label>
+					<input
+						onChange={(event) => {
+							setAmount(Number(Number(event.target.value).toFixed(2)));
+						}}
+						type="number"
+						className="form-input"
+						name="amount"
+						value={amount}
+						placeholder="Amount"
+					></input>
+					<label htmlFor="category">Expense Category</label>
+					<select
+						className="form-input"
+						onChange={(event) => {
+							setCategory(event.target.value);
+						}}
+						value={category}
+					>
+						{categoryList.map((element: Category) => {
+							return (
+								<option key={element.id} value={element.title}>
+									{element.title}
+								</option>
+							);
+						})}
+					</select>
+					{/* <input onChange={(event) => {setCategory(event.target.value)}} type="text" className="form-input" name="category" value={category} placeholder="Category"></input> */}
+					<label htmlFor="date">Expense Date</label>
+					<input
+						onChange={(event) => {
+							setDateDisplay(event.target.value),
+								console.log(event.target.value),
+								setDate(new Date(event.target.value + 'T00:00:00'));
+						}}
+						type="date"
+						className="form-input"
+						name="date"
+						value={dateDisplay}
+					></input>
+					<label className="red-text">{errorText}</label>
+					<button onClick={() => addExpense()}>Submit</button>
+				</div>
+				<div>
+					<span className="important-notice">* signify required fields</span>
+				</div>
 			</div>
 		</div>
 	);

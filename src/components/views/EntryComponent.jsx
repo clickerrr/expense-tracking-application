@@ -3,7 +3,7 @@ import Dashboard from './Dashboard';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Metrics from './Metrics';
 import Navbar from '../organisms/Navbar';
-// import sampleExpenseList from '../atoms/ExpenseList';
+import Budgeting from './Budgeting';
 import ExpenseListContext from '../context/ExpenseContext';
 import CategoryListContext from '../context/CategoryListContext';
 
@@ -24,7 +24,13 @@ const EntryComponent = () => {
 						name: item['ex_name'],
 						amount: item['ex_amount'],
 						date: new Date(item['ex_date']),
-						category: { id: item['cat_id'], title: item['cat_title'] },
+						category: {
+							id: item['cat_id'],
+							title: item['cat_title'],
+							removable: item['cat_removable'],
+							editable: item['cat_editable'],
+							color: item['cat_color'],
+						},
 					};
 					expenses.push(newExpense);
 				});
@@ -43,6 +49,9 @@ const EntryComponent = () => {
 					const newCategory = {
 						id: item['cat_id'],
 						title: item['cat_title'],
+						removable: item['cat_removable'],
+						editable: item['cat_editable'],
+						color: item['cat_color'],
 					};
 					categories.push(newCategory);
 				});
@@ -71,6 +80,7 @@ const EntryComponent = () => {
 					<Routes>
 						<Route index element={<Dashboard />} />
 						<Route path="/metrics" element={<Metrics />} />
+						<Route path="/budgeting" element={<Budgeting />} />
 					</Routes>
 				</BrowserRouter>
 			</CategoryListContext.Provider>
