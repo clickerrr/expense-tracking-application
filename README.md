@@ -44,6 +44,6 @@ This feature is yet to be developed, but here are some of my ideas:
 **Front End**
 React
 
-**(Backend)[https://github.com/clickerrr/expense-tracking-server]**
+(Backend)[https://github.com/clickerrr/expense-tracking-server]
 Bun.js
 SQLite
