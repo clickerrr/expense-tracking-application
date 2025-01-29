@@ -1,9 +1,11 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import '../../styles/expenseAdder.css';
-import { useContext, useEffect, useState } from 'react';
-import Expense from '../../types/Expense';
-import Category from '../../types/Category';
-import CategoryListContext, { CategoryListContextProps } from '../context/CategoryListContext';
+import '@/styles/expenseAdder.css';
+import {useContext, useEffect, useState} from 'react';
+import Expense from '@/types/Expense';
+import Category from '@/types/Category';
+import CategoryListContext, {
+	CategoryListContextProps,
+} from '@/components/context/CategoryListContext';
 
 interface ExpenseAdderProps {
 	onClose: () => void;
@@ -11,7 +13,7 @@ interface ExpenseAdderProps {
 	documentToEdit: Expense | null | undefined;
 }
 
-const ExpenseForm = ({ onClose, onSubmitExpense, documentToEdit }: ExpenseAdderProps) => {
+const ExpenseForm = ({onClose, onSubmitExpense, documentToEdit}: ExpenseAdderProps) => {
 	const categoryContext = useContext<CategoryListContextProps | undefined>(CategoryListContext);
 
 	const [name, setName] = useState('');
@@ -120,44 +122,40 @@ const ExpenseForm = ({ onClose, onSubmitExpense, documentToEdit }: ExpenseAdderP
 						className="close-button"
 						onClick={() => {
 							onClose();
-						}}
-					>
+						}}>
 						X
 					</button>
 				</div>
 				<div className="adder-content">
 					<label htmlFor="name">Expense Name</label>
 					<input
-						onChange={(event) => {
+						onChange={event => {
 							setName(event.target.value);
 						}}
 						type="text"
 						className="form-input"
 						name="name"
 						value={name}
-						placeholder="Enter name here..."
-					></input>
+						placeholder="Enter name here..."></input>
 					<label htmlFor="amount">
 						Expense Amount<span className="red-text">*</span>
 					</label>
 					<input
-						onChange={(event) => {
+						onChange={event => {
 							setAmount(Number(Number(event.target.value).toFixed(2)));
 						}}
 						type="number"
 						className="form-input"
 						name="amount"
 						value={amount}
-						placeholder="Amount"
-					></input>
+						placeholder="Amount"></input>
 					<label htmlFor="category">Expense Category</label>
 					<select
 						className="form-input"
-						onChange={(event) => {
+						onChange={event => {
 							setCategory(event.target.value);
 						}}
-						value={category}
-					>
+						value={category}>
 						{categoryList.map((element: Category) => {
 							return (
 								<option key={element.id} value={element.title}>
@@ -169,7 +167,7 @@ const ExpenseForm = ({ onClose, onSubmitExpense, documentToEdit }: ExpenseAdderP
 					{/* <input onChange={(event) => {setCategory(event.target.value)}} type="text" className="form-input" name="category" value={category} placeholder="Category"></input> */}
 					<label htmlFor="date">Expense Date</label>
 					<input
-						onChange={(event) => {
+						onChange={event => {
 							setDateDisplay(event.target.value),
 								console.log(event.target.value),
 								setDate(new Date(event.target.value + 'T00:00:00'));
@@ -177,8 +175,7 @@ const ExpenseForm = ({ onClose, onSubmitExpense, documentToEdit }: ExpenseAdderP
 						type="date"
 						className="form-input"
 						name="date"
-						value={dateDisplay}
-					></input>
+						value={dateDisplay}></input>
 					<label className="red-text">{errorText}</label>
 					<button onClick={() => addExpense()}>Submit</button>
 				</div>

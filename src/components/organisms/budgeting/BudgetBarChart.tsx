@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 
-import '../../styles/budgetbarchart.css';
+import '@/styles/budgetbarchart.css';
 
 interface BudgetBarChartProps {
 	propsTitle: string;
@@ -8,11 +8,7 @@ interface BudgetBarChartProps {
 	propsActualTotal: number;
 }
 
-const BudgetBarChart = ({
-	propsTitle,
-	propsPlannedTotal,
-	propsActualTotal,
-}: BudgetBarChartProps) => {
+const BudgetBarChart = ({propsTitle, propsPlannedTotal, propsActualTotal}: BudgetBarChartProps) => {
 	const [title, setTitle] = useState('');
 	const [plannedTotal, setPlannedTotal] = useState(0);
 	const [actualTotal, setAcutalTotal] = useState(0);
@@ -46,14 +42,14 @@ const BudgetBarChart = ({
 				<span className="bar-title">Planned</span>
 				<span>${plannedTotal}</span>
 				<div className="bar-container">
-					<div className="bar" style={{ width: `${plannedTotalPercentage}%` }}></div>
+					<div className="bar" style={{width: `${plannedTotalPercentage}%`}}></div>
 				</div>
 			</div>
 			<div className="bar-chart-item">
 				<span>Actual</span>
 				<span>${actualTotal}</span>
 				<div className="bar-container">
-					<div className="bar" style={{ width: `${actualTotalPercentage}%` }}></div>
+					<div className="bar" style={{width: `${actualTotalPercentage}%`}}></div>
 				</div>
 			</div>
 		</div>

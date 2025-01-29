@@ -1,6 +1,6 @@
-import Category from '../../types/Category';
-import '../../styles/categoryForm.css';
-import { useEffect, useState } from 'react';
+import Category from '@/types/Category';
+import '@/styles/categoryForm.css';
+import {useEffect, useState} from 'react';
 interface CategoryFormProps {
 	onClose: () => void;
 	onSave: (category: Category) => void;
@@ -8,7 +8,7 @@ interface CategoryFormProps {
 	passedError: string | null;
 }
 
-const CategoryForm = ({ onClose, onSave, categoryToEdit, passedError }: CategoryFormProps) => {
+const CategoryForm = ({onClose, onSave, categoryToEdit, passedError}: CategoryFormProps) => {
 	const [category, setCategory] = useState<Category | undefined>(undefined);
 	const [catName, setCatName] = useState<string>('');
 	const [error, setError] = useState<string>('');
@@ -58,8 +58,7 @@ const CategoryForm = ({ onClose, onSave, categoryToEdit, passedError }: Category
 						id="category-name"
 						placeholder="Category Name"
 						value={catName}
-						onChange={(event) => setCatName(event.target.value)}
-					></input>
+						onChange={event => setCatName(event.target.value)}></input>
 					<span className="error">{error}</span>
 					<button onClick={() => handleSave()} className="save-button">
 						Save

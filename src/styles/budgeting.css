@@ -9,5 +9,8 @@
 	padding-right: 1em;
 }
 
-.container .content {
+.container {
+	display: flex;
+	justify-content: center;
+	back
 }

@@ -1,14 +1,15 @@
-import '../../styles/budgetdetails.css';
-import BudgetBarChart from './BudgetBarChart';
-import ExpensesCategory from './ExpensesCategory';
-import IncomeCategory from './IncomeCategory';
+import {useEffect} from 'react';
+import '@/styles/budgetdetails.css';
+import BudgetBarChart from '@/components/organisms/budgeting/BudgetBarChart';
+import ExpensesCategory from '@/components/organisms/category/ExpensesCategory';
+import IncomeCategory from '@/components/organisms/budgeting/IncomeCategory';
 
 interface BudgetDetailsProps {
 	propsSelectedYear: number;
 	propsSelectedMonth: number;
 }
 
-const BudgetDetails = ({ propsSelectedYear, propsSelectedMonth }: BudgetDetailsProps) => {
+const BudgetDetails = ({propsSelectedYear, propsSelectedMonth}: BudgetDetailsProps) => {
 	const monthList: string[] = [
 		'Jan',
 		'Feb',
@@ -23,6 +24,23 @@ const BudgetDetails = ({ propsSelectedYear, propsSelectedMonth }: BudgetDetailsP
 		'Nov',
 		'Dec',
 	];
+
+	useEffect(() => {
+		fetch(`http://localhost:3000/budgeting/${propsSelectedYear}/${propsSelectedMonth}`)
+			.then(response => {
+				return response.json();
+			})
+			.then(result => {
+				console.log('budgeting result', result);
+			});
+	}, [propsSelectedYear, propsSelectedMonth]);
+
+	const getMonthNumber = (inputMonth: string) => {
+		const monthIndex = monthList.findIndex((month: string) => {
+			return month === inputMonth;
+		});
+		return monthIndex + 1;
+	};
 
 	return (
 		<div className="budget-details-parent">

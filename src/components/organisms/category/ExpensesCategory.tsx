@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import '../../styles/expensescategory.css';
-import BudgetCategoryItem from '../../types/BudgetCategoryItem';
-import BudgetCategoryElement from '../atoms/BudgetCategoryElement';
+import {useEffect, useState} from 'react';
+import '@/styles/expensescategory.css';
+import BudgetCategoryItem from '@/types/BudgetCategoryItem';
+import BudgetCategoryElement from '@/components/atoms/budgeting/BudgetCategoryElement';
 interface ExpensesCategoryProps {
 	propsSelectedYear: number;
 	propsSelectedMonth: number;
 }
 
-const ExpensesCategory = ({ propsSelectedMonth, propsSelectedYear }: ExpensesCategoryProps) => {
+const ExpensesCategory = ({propsSelectedMonth, propsSelectedYear}: ExpensesCategoryProps) => {
 	const [categoryData, setCategoryData] = useState<BudgetCategoryItem[]>([]);
 
 	const [actualAmount, setActualAmount] = useState<number>(0);
@@ -18,14 +18,14 @@ const ExpensesCategory = ({ propsSelectedMonth, propsSelectedYear }: ExpensesCat
 		console.log('propsSelectedYear', propsSelectedYear);
 
 		fetch(`http://127.0.0.1:3000/budgeting/category/all`)
-			.then((response) => {
+			.then(response => {
 				return response.json();
 			})
-			.then((result) => {
+			.then(result => {
 				console.log('result', result);
 				const finalResult: BudgetCategoryItem[] = [];
 				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				result.result.forEach((element: any) => {
+				result.results.forEach((element: any) => {
 					const newElement: BudgetCategoryItem = {
 						id: element.cat_id,
 						title: element.cat_title,
@@ -39,19 +39,19 @@ const ExpensesCategory = ({ propsSelectedMonth, propsSelectedYear }: ExpensesCat
 			})
 			.then((finalResult: BudgetCategoryItem[]) => {
 				fetch(
-					`http://127.0.0.1:3000/budgeting/expenses/category/${propsSelectedYear}/${propsSelectedMonth}`
+					`http://127.0.0.1:3000/budgeting/expenses/category/${propsSelectedYear}/${propsSelectedMonth}`,
 				)
-					.then((response) => {
+					.then(response => {
 						return response.json();
 					})
-					.then((result) => {
+					.then(result => {
 						console.log('result', result);
 						// eslint-disable-next-line @typescript-eslint/no-explicit-any
 						result.results.forEach((element: any) => {
 							const foundCategory = finalResult.find(
 								(categoryItem: BudgetCategoryItem) => {
 									return element.cat_id === categoryItem.id;
-								}
+								},
 							);
 							console.log('foundCategory', foundCategory);
 							if (foundCategory === undefined) return;
@@ -84,7 +84,7 @@ const ExpensesCategory = ({ propsSelectedMonth, propsSelectedYear }: ExpensesCat
 
 	const calculateDifferences = (data: BudgetCategoryItem[]) => {
 		let calculatedDifferences = 0;
-		data.forEach((element) => {
+		data.forEach(element => {
 			calculatedDifferences += element.planned - element.actual;
 		});
 		return calculatedDifferences;
