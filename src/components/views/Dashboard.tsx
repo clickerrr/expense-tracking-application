@@ -1,6 +1,6 @@
-import ExpenseList from '../organisms/ExpenseList';
-import CategoryList from '../organisms/CategoryList';
-import '../../styles/dashboard.css';
+import ExpenseList from '@/components/organisms/expenses/ExpenseList';
+import CategoryList from '@/components/organisms/category/CategoryList';
+import '@/styles/dashboard.css';
 
 const Dashboard = () => {
 	return (

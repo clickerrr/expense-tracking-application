@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
-import Expense from '../../types/Expense';
-import '../../styles/expenseList.css';
-import sortIcon from '../../assets/sort-icon.svg';
-import ExpenseForm from './ExpenseForm';
-import ExpenseListContext from '../context/ExpenseContext';
-import CategoryListContext from '../context/CategoryListContext';
-import ExpenseListElement from '../atoms/ExpenseListElement';
+import {useContext, useEffect, useState} from 'react';
+import Expense from '@/types/Expense';
+import '@/styles/expenseList.css';
+import sortIcon from '@/assets/sort-icon.svg';
+import ExpenseForm from '@/components/organisms/expenses/ExpenseForm';
+import ExpenseListContext from '@/components/context/ExpenseContext';
+import CategoryListContext from '@/components//context/CategoryListContext';
+import ExpenseListElement from '@/components/atoms/expenses/ExpenseListElement';
 
 const ExpenseListView = () => {
 	const monthList: string[] = [
@@ -92,7 +92,7 @@ const ExpenseListView = () => {
 	const filterList = (
 		yearFilter: number | null,
 		monthFilter: number | null,
-		list: Expense[] | null
+		list: Expense[] | null,
 	): Expense[] => {
 		if (list === null || list === undefined) list = [];
 		if (yearFilter === null) return list;
@@ -124,11 +124,11 @@ const ExpenseListView = () => {
 	};
 
 	const handleYearButtonClick = () => {
-		setYearDropdownVisible((yearDropdownVisible) => !yearDropdownVisible);
+		setYearDropdownVisible(yearDropdownVisible => !yearDropdownVisible);
 	};
 
 	const handleMonthButtonClick = () => {
-		setMonthDropdownVisible((monthDropdownVisible) => !monthDropdownVisible);
+		setMonthDropdownVisible(monthDropdownVisible => !monthDropdownVisible);
 	};
 
 	const resetYearFilter = () => {
@@ -139,7 +139,7 @@ const ExpenseListView = () => {
 		}
 		setYearFilter(new Date().getFullYear());
 		setFilteredList(
-			filterList(new Date().getFullYear(), monthFilter, expenseContext.expenseList)
+			filterList(new Date().getFullYear(), monthFilter, expenseContext.expenseList),
 		);
 	};
 
@@ -184,15 +184,15 @@ const ExpenseListView = () => {
 			method: 'POST',
 			headers: requestHeaders,
 		})
-			.then((response) => {
+			.then(response => {
 				return response.json();
 			})
-			.then((result) => {
+			.then(result => {
 				console.log(result);
 				expense.id = result['ex_id'];
 				console.log('expense', expense);
 			})
-			.catch((error) => {
+			.catch(error => {
 				console.error(error);
 			});
 	};
@@ -210,7 +210,7 @@ const ExpenseListView = () => {
 			) {
 				setExpenseEditorShowing(true);
 			} else {
-				setExpenseEditorShowing((expenseEditorShowing) => !expenseEditorShowing);
+				setExpenseEditorShowing(expenseEditorShowing => !expenseEditorShowing);
 			}
 			setExpenseAdderShowing(false);
 		}
@@ -219,11 +219,11 @@ const ExpenseListView = () => {
 	const handleDeleteExpense = (expenseToDelete: Expense) => {
 		if (expenseContext === undefined || expenseContext.expenseList === null) return;
 
-		const deletedFromFilterList = filteredList.filter((value) => {
+		const deletedFromFilterList = filteredList.filter(value => {
 			return value.id !== expenseToDelete.id;
 		});
 
-		const deletedFromExpenseList = expenseContext.expenseList.filter((value) => {
+		const deletedFromExpenseList = expenseContext.expenseList.filter(value => {
 			return value.id !== expenseToDelete.id;
 		});
 
@@ -237,13 +237,13 @@ const ExpenseListView = () => {
 		fetch(`http://127.0.0.1:3000/expense/id/${expenseToDelete.id}`, {
 			method: 'DELETE',
 		})
-			.then((response) => {
+			.then(response => {
 				return response.text();
 			})
-			.then((result) => {
+			.then(result => {
 				console.log(result);
 			})
-			.catch((error) => {
+			.catch(error => {
 				console.error(error);
 			});
 	};
@@ -251,7 +251,7 @@ const ExpenseListView = () => {
 	const updateExpense = (updatedExpense: Expense) => {
 		if (expenseContext === undefined || expenseContext.expenseList === null) return;
 
-		const foundExpense = filteredList?.find((expense) => {
+		const foundExpense = filteredList?.find(expense => {
 			return expense.id === updatedExpense.id;
 		});
 
@@ -281,13 +281,13 @@ const ExpenseListView = () => {
 			method: 'PATCH',
 			headers: requestHeaders,
 		})
-			.then((response) => {
+			.then(response => {
 				return response.json();
 			})
-			.then((result) => {
+			.then(result => {
 				console.log(result);
 			})
-			.catch((error) => {
+			.catch(error => {
 				console.error(error);
 			});
 	};
@@ -330,7 +330,7 @@ const ExpenseListView = () => {
 									onClick={() => {
 										setYearFilter(year);
 										setYearDropdownVisible(
-											(yearDropdownVisible) => !yearDropdownVisible
+											yearDropdownVisible => !yearDropdownVisible,
 										);
 
 										if (expenseContext === undefined || expenseContext === null)
@@ -338,11 +338,10 @@ const ExpenseListView = () => {
 										const filteredList = filterList(
 											year,
 											monthFilter,
-											expenseContext.expenseList
+											expenseContext.expenseList,
 										);
 										setFilteredList(filteredList);
-									}}
-								>
+									}}>
 									{year}
 								</div>
 							);
@@ -362,18 +361,17 @@ const ExpenseListView = () => {
 									onClick={() => {
 										setMonthFilter(index);
 										setMonthDropdownVisible(
-											(monthDropdownVisible) => !monthDropdownVisible
+											monthDropdownVisible => !monthDropdownVisible,
 										);
 										if (expenseContext === undefined || expenseContext === null)
 											return;
 										const filteredList = filterList(
 											yearFilter,
 											index,
-											expenseContext.expenseList
+											expenseContext.expenseList,
 										);
 										setFilteredList(filteredList);
-									}}
-								>
+									}}>
 									{month}
 								</div>
 							);
@@ -388,10 +386,9 @@ const ExpenseListView = () => {
 				<div
 					className="date-container"
 					onClick={() => {
-						setFilterAscending((filterAscending) => !filterAscending);
+						setFilterAscending(filterAscending => !filterAscending);
 						sortList(filteredList);
-					}}
-				>
+					}}>
 					<span>Expense Date</span>
 					<img
 						src={sortIcon}
@@ -413,8 +410,7 @@ const ExpenseListView = () => {
 						setExpenseEditorShowing(false);
 						setExpenseAdderShowing(true);
 					}}
-					className="new-expense-button"
-				>
+					className="new-expense-button">
 					Add New Expense
 				</button>
 				<div className="delete-mode-container">
@@ -424,16 +420,15 @@ const ExpenseListView = () => {
 						type="checkbox"
 						name="Delete Mode"
 						onChange={() => {
-							setDeleteMode((deleteMode) => !deleteMode);
-						}}
-					></input>
+							setDeleteMode(deleteMode => !deleteMode);
+						}}></input>
 				</div>
 			</div>
 
 			{expenseAdderShowing ? (
 				<ExpenseForm
 					onClose={() =>
-						setExpenseAdderShowing((expenseAdderShowing) => !expenseAdderShowing)
+						setExpenseAdderShowing(expenseAdderShowing => !expenseAdderShowing)
 					}
 					onSubmitExpense={(newExpense: Expense) => addNewExpense(newExpense)}
 					documentToEdit={null}
@@ -444,7 +439,7 @@ const ExpenseListView = () => {
 			{expenseEditorShowing ? (
 				<ExpenseForm
 					onClose={() =>
-						setExpenseEditorShowing((expenseEditorShowing) => !expenseEditorShowing)
+						setExpenseEditorShowing(expenseEditorShowing => !expenseEditorShowing)
 					}
 					onSubmitExpense={(updatedExpense: Expense) => updateExpense(updatedExpense)}
 					documentToEdit={expenseToEdit}

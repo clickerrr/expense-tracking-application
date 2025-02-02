@@ -1,12 +1,14 @@
-import { useContext, useEffect, useState } from 'react';
-import CategoryListContext, { CategoryListContextProps } from '../context/CategoryListContext';
-import Category from '../../types/Category';
-import '../../styles/categoryList.css';
-import editLogo from '../../assets/edit-icon.svg';
-import trashLogo from '../../assets/trash-icon.svg';
-import CategoryForm from './CategoryForm';
-import ExpenseListContext, { ExpenseListContextProps } from '../context/ExpenseContext';
-import Expense from '../../types/Expense';
+import {useContext, useEffect, useState} from 'react';
+import CategoryListContext, {
+	CategoryListContextProps,
+} from '@/components/context/CategoryListContext';
+import Category from '@/types/Category';
+import '@/styles/categoryList.css';
+import editLogo from '@/assets/edit-icon.svg';
+import trashLogo from '@/assets/trash-icon.svg';
+import CategoryForm from '@/components/organisms/category/CategoryForm';
+import ExpenseListContext, {ExpenseListContextProps} from '@/components/context/ExpenseContext';
+import Expense from '@/types/Expense';
 
 const CategoryList = () => {
 	const categoryContext = useContext<CategoryListContextProps | undefined>(CategoryListContext);
@@ -19,7 +21,7 @@ const CategoryList = () => {
 	const [errorToPass, setErrorToPass] = useState<string | null>(null);
 	const [swatchEditorHidden, setSwatchEditorHidden] = useState<boolean>(true);
 	const [swatchEditingElement, setSwatchEditingElement] = useState<Category | undefined>(
-		undefined
+		undefined,
 	);
 
 	useEffect(() => {}, [categoryContext?.categoryList]);
@@ -50,7 +52,7 @@ const CategoryList = () => {
 
 	const checkIfCategoryExists = (category: Category) => {
 		if (categoryContext === undefined || categoryContext === null) return;
-		return categoryContext.categoryList.find((element) => {
+		return categoryContext.categoryList.find(element => {
 			return category.title.toLowerCase() === element.title.toLowerCase();
 		});
 	};
@@ -69,15 +71,15 @@ const CategoryList = () => {
 			method: 'POST',
 			headers: requestHeaders,
 		})
-			.then((response) => {
+			.then(response => {
 				return response.json();
 			})
-			.then((result) => {
+			.then(result => {
 				console.log(result);
 				newCategory.id = result['cat_id'];
 				console.log('newcategory', newCategory);
 			})
-			.catch((error) => {
+			.catch(error => {
 				console.error(error);
 			});
 	};
@@ -95,7 +97,7 @@ const CategoryList = () => {
 		}
 		if (categoryToEdit === undefined) return;
 		let foundCategory = undefined;
-		const newList = categoryContext.categoryList.map((element) => {
+		const newList = categoryContext.categoryList.map(element => {
 			if (element.id === updatedCategory.id) {
 				element.title = updatedCategory.title;
 				foundCategory = element;
@@ -141,13 +143,13 @@ const CategoryList = () => {
 			method: 'PATCH',
 			headers: requestHeaders,
 		})
-			.then((response) => {
+			.then(response => {
 				return response.text();
 			})
-			.then((result) => {
+			.then(result => {
 				console.log(result);
 			})
-			.catch((error) => {
+			.catch(error => {
 				console.error(error);
 			});
 	};
@@ -178,7 +180,7 @@ const CategoryList = () => {
 		if (otherCategory === undefined) return;
 		const newList = expenseContext.expenseList.map((element: Expense) => {
 			if (element.category.id === category.id) {
-				element.category = { ...otherCategory };
+				element.category = {...otherCategory};
 			}
 			return element;
 		});
@@ -190,20 +192,20 @@ const CategoryList = () => {
 		fetch(`http://127.0.0.1:3000/category/${category.id}`, {
 			method: 'DELETE',
 		})
-			.then((response) => {
+			.then(response => {
 				return response.text();
 			})
-			.then((result) => {
+			.then(result => {
 				console.log(result);
 			})
-			.catch((error) => {
+			.catch(error => {
 				console.error(error);
 			});
 	};
 
 	const handleSwatchChange = (value: string) => {
 		if (swatchEditingElement === undefined) return;
-		const newElement = { ...swatchEditingElement };
+		const newElement = {...swatchEditingElement};
 		newElement.color = value;
 
 		setSwatchEditingElement(newElement);
@@ -214,7 +216,7 @@ const CategoryList = () => {
 
 		if (swatchEditingElement === undefined) return;
 		console.log('Setting element');
-		const foundElement = categoryContext.categoryList.find((element) => {
+		const foundElement = categoryContext.categoryList.find(element => {
 			if (element.id === swatchEditingElement.id) {
 				element.color = swatchEditingElement.color;
 				return element.id === swatchEditingElement.id;
@@ -229,7 +231,7 @@ const CategoryList = () => {
 
 		const newList = expenseContext.expenseList.map((element: Expense) => {
 			if (element.category.id === swatchEditingElement.id) {
-				element.category = { ...swatchEditingElement };
+				element.category = {...swatchEditingElement};
 			}
 			return element;
 		});
@@ -258,9 +260,8 @@ const CategoryList = () => {
 							setSwatchEditingElement(categoryContext.categoryList[index]);
 							setSwatchEditorHidden(false);
 						}}
-						style={{ backgroundColor: category.color }}
-						className="color-swatch"
-					></div>
+						style={{backgroundColor: category.color}}
+						className="color-swatch"></div>
 
 					{category.editable ? (
 						<img
@@ -298,8 +299,7 @@ const CategoryList = () => {
 					onClick={() => {
 						handleShowCategoryAdder();
 					}}
-					className="button"
-				>
+					className="button">
 					+ Add New Category
 				</button>
 			</div>
@@ -308,7 +308,7 @@ const CategoryList = () => {
 
 				{newCategoryLineShowing ? (
 					<CategoryForm
-						onSave={(updatedCategory) => handleAddingNewCategory(updatedCategory)}
+						onSave={updatedCategory => handleAddingNewCategory(updatedCategory)}
 						onClose={() => setNewCategoryLineShowing(false)}
 						categoryToEdit={undefined}
 						passedError={null}
@@ -321,7 +321,7 @@ const CategoryList = () => {
 			{editCategoryShowing ? (
 				<CategoryForm
 					onClose={() => setEditCategoryShowing(false)}
-					onSave={(updatedCategory) => {
+					onSave={updatedCategory => {
 						setEditCategoryShowing(false);
 						updateCategory(updatedCategory);
 					}}
@@ -336,7 +336,7 @@ const CategoryList = () => {
 			) : (
 				<div className="swatch-editor">
 					<input
-						onChange={(event) => {
+						onChange={event => {
 							handleSwatchChange(event.target.value);
 						}}
 						value={swatchEditingElement ? swatchEditingElement.color : '#ffffff'}
@@ -346,16 +346,14 @@ const CategoryList = () => {
 						onClick={() => {
 							setSwatchEditingElement(undefined);
 							setSwatchEditorHidden(true);
-						}}
-					>
+						}}>
 						Cancel
 					</button>
 					<button
 						onClick={() => {
 							submitSwatchChange();
 							setSwatchEditorHidden(true);
-						}}
-					>
+						}}>
 						Submit
 					</button>
 				</div>

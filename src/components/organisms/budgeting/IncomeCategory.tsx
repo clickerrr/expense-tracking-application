@@ -1,4 +1,4 @@
-import '../../styles/expensescategory.css';
+import '@/styles/expensescategory.css';
 
 const IncomeCategory = () => {
 	return (
