@@ -6,13 +6,14 @@ import BudgetCategoryItem from '@/types/BudgetCategoryItem';
 interface BudgetTableProps {
 	title: string;
 	budgetData: BudgetCategoryItem[];
-	onEdit: () => void;
+	onEdit: (categoryTitle: string) => void;
 }
 
 const BudgetCategoryTable = ({title, budgetData, onEdit}: BudgetTableProps) => {
 	const headColumns: string[] = ['Category Title', 'Planned', 'Actual', 'Difference'];
-
+	const [displayData, setDisplayData] = useState<BudgetCategoryItem[]>(budgetData);
 	useEffect(() => {
+		setDisplayData(budgetData);
 		sumTotal('planned', setTotalPlanned);
 		sumTotal('actual', setTotalActual);
 		sumDifference();
@@ -24,7 +25,7 @@ const BudgetCategoryTable = ({title, budgetData, onEdit}: BudgetTableProps) => {
 
 	const sumTotal = (field: string, setter: (data: number) => void) => {
 		let totalSum = 0;
-		budgetData.forEach((element: BudgetCategoryItem) => {
+		displayData.forEach((element: BudgetCategoryItem) => {
 			const objectKeys = Object.keys(element);
 			const found = objectKeys.findIndex(element => {
 				return element === field;
@@ -39,7 +40,7 @@ const BudgetCategoryTable = ({title, budgetData, onEdit}: BudgetTableProps) => {
 
 	const sumDifference = () => {
 		let totalDifference = 0;
-		budgetData.forEach((element: BudgetCategoryItem) => {
+		displayData.forEach((element: BudgetCategoryItem) => {
 			totalDifference += element.planned - element.actual;
 		});
 		setTotalDiff(totalDifference);
@@ -86,7 +87,7 @@ const BudgetCategoryTable = ({title, budgetData, onEdit}: BudgetTableProps) => {
 	};
 
 	const renderData = () => {
-		return budgetData.map((element: BudgetCategoryItem) => {
+		return displayData.map((element: BudgetCategoryItem) => {
 			const diff = element.planned - element.actual;
 			return (
 				<tr key={element.id} className="table-row">
@@ -105,7 +106,7 @@ const BudgetCategoryTable = ({title, budgetData, onEdit}: BudgetTableProps) => {
 		<>
 			<div className="table-title-container">
 				<h2>{title}</h2>
-				<button className="edit-button" onClick={() => onEdit()}>
+				<button className="edit-button" onClick={() => onEdit(title)}>
 					<img className="edit-icon" src={editLogo} />
 				</button>
 			</div>

@@ -8,15 +8,18 @@ interface BudgetCategoryTableProps {
 }
 const BudgetCategoryTable = ({propsCategories, setPropsCategories}: BudgetCategoryTableProps) => {
 	const [addingNewCategory, setAddingNewCategory] = useState<boolean>(false);
-	useEffect(() => {}, [propsCategories]);
+	const [categories, setCategories] = useState<BudgetCategoryItem[]>(propsCategories);
+	useEffect(() => {
+		setCategories(propsCategories);
+	}, [propsCategories]);
 
 	const submitNewCategory = (data: BudgetCategoryItem) => {
-		setPropsCategories([...propsCategories, data]);
+		setPropsCategories([...categories, data]);
 		setAddingNewCategory(false);
 	};
 
 	const validAdditionToList = (data: BudgetCategoryItem) => {
-		const found = propsCategories.find((element: BudgetCategoryItem) => {
+		const found = categories.find((element: BudgetCategoryItem) => {
 			return element.title.toLowerCase() === data.title.toLowerCase();
 		});
 		if (found !== null || found !== undefined) return false;
@@ -31,7 +34,7 @@ const BudgetCategoryTable = ({propsCategories, setPropsCategories}: BudgetCatego
 					<th>Planned Amount</th>
 					<th></th>
 				</tr>
-				{propsCategories.map((category: BudgetCategoryItem) => {
+				{categories.map((category: BudgetCategoryItem) => {
 					return <BudgetCategoryTableRow category={category} />;
 				})}
 				{addingNewCategory ? (
