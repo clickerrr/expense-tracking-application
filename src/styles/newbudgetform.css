@@ -119,3 +119,7 @@
 .new-budget-summary-edit-icon:hover {
 	transform: scale(1.05);
 }
+
+.new-budget-starting-input {
+	margin-bottom: 1em;
+}

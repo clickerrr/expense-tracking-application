@@ -5,6 +5,7 @@ import NewMonthlyBudget from '../../molecules/budgeting/NewMonthlyBudget';
 import NewMonthlyIncome from '../../molecules/budgeting/NewBudgetIncome';
 import NewBudgetSummaryConfirmation from '@/components/molecules/budgeting/NewBudgetSummaryConfirmation';
 import NewExpensesBudget from '@/components/molecules/budgeting/NewExpensesBudget';
+import monthList from '@/components/atoms/monthList';
 
 interface NewBudgetFormProps {
 	selectedYear: number;
@@ -96,6 +97,11 @@ const NewBudgetForm = ({selectedYear, selectedMonth, onCancel, onComplete}: NewB
 					<div
 						className="new-budget-progress"
 						style={{width: `${(pageNumber / pageCount) * 100}%`}}></div>
+				</div>
+				<div>
+					<h2>
+						New Budget for {monthList[selectedMonth]} {selectedYear}
+					</h2>
 				</div>
 				{renderPage()}
 				<div className="new-budget-form-buttons">

@@ -3,6 +3,7 @@ import '@/styles/createnewbudget.css';
 import CreateBudgetCategory from './CreateBudgetCategory';
 import NewBudgetCategory from './NewBudgetCategory';
 import NewBudgetForm from './NewBudgetForm';
+import monthList from '@/components/atoms/monthList';
 
 interface SelectBudgetProps {
 	onSubmit: () => void;
@@ -12,20 +13,6 @@ interface SelectBudgetProps {
 
 const SelectBudget = ({onSubmit, passSelectedYear, passSelectedMonth}: SelectBudgetProps) => {
 	const [yearList, setYearList] = useState<number[]>([new Date().getFullYear()]);
-	const monthList: string[] = [
-		'Jan',
-		'Feb',
-		'Mar',
-		'Apr',
-		'May',
-		'Jun',
-		'Jul',
-		'Aug',
-		'Sep',
-		'Oct',
-		'Nov',
-		'Dec',
-	];
 
 	const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
 
