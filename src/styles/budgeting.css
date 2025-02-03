@@ -7,6 +7,14 @@
 .header {
 	padding-left: 1em;
 	padding-right: 1em;
+	display: flex;
+	flex-direction: column;
+}
+
+.header .date-title {
+	width: 50%;
+	justify-self: center;
+	align-self: center;
 }
 
 .container {
