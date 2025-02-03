@@ -18,6 +18,18 @@ const BudgetCategoryTable = ({propsCategories, setPropsCategories}: BudgetCatego
 		setAddingNewCategory(false);
 	};
 
+	const removeCategory = (data: BudgetCategoryItem) => {
+		const foundIndex = categories.findIndex((element: BudgetCategoryItem) => {
+			return element.id === data.id;
+		});
+		if (foundIndex !== undefined) {
+			const newList = categories.filter((_, index: number) => {
+				return index !== foundIndex;
+			});
+			setPropsCategories([...newList]);
+		}
+	};
+
 	const validAdditionToList = (data: BudgetCategoryItem) => {
 		const found = categories.find((element: BudgetCategoryItem) => {
 			return element.title.toLowerCase() === data.title.toLowerCase();
@@ -35,7 +47,7 @@ const BudgetCategoryTable = ({propsCategories, setPropsCategories}: BudgetCatego
 					<th></th>
 				</tr>
 				{categories.map((category: BudgetCategoryItem) => {
-					return <BudgetCategoryTableRow category={category} />;
+					return <BudgetCategoryTableRow category={category} onRemove={removeCategory} />;
 				})}
 				{addingNewCategory ? (
 					<></>

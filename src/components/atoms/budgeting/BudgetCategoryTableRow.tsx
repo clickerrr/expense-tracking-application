@@ -3,8 +3,9 @@ import {useEffect, useState} from 'react';
 
 interface BudgetCategoryTableProps {
 	category: BudgetCategoryItem;
+	onRemove: (category: BudgetCategoryItem) => void;
 }
-const BudgetCategoryTableRow = ({category}: BudgetCategoryTableProps) => {
+const BudgetCategoryTableRow = ({category, onRemove}: BudgetCategoryTableProps) => {
 	const [plannedAmount, setPlannedAmount] = useState<number>(category.planned);
 	useEffect(() => {}, [category]);
 	return (
@@ -20,6 +21,14 @@ const BudgetCategoryTableRow = ({category}: BudgetCategoryTableProps) => {
 					}}
 					value={plannedAmount}
 				/>
+			</td>
+			<td>
+				<button
+					onClick={() => {
+						onRemove(category);
+					}}>
+					-
+				</button>
 			</td>
 		</tr>
 	);
