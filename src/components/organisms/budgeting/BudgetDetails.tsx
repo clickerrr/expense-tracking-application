@@ -3,6 +3,7 @@ import '@/styles/budgetdetails.css';
 import BudgetBarChart from '@/components/organisms/budgeting/BudgetBarChart';
 import ExpensesCategory from '@/components/organisms/category/ExpensesCategory';
 import IncomeCategory from '@/components/organisms/budgeting/IncomeCategory';
+import monthList from '@/components/atoms/monthList';
 
 interface BudgetDetailsProps {
 	propsSelectedYear: number;
@@ -10,21 +11,6 @@ interface BudgetDetailsProps {
 }
 
 const BudgetDetails = ({propsSelectedYear, propsSelectedMonth}: BudgetDetailsProps) => {
-	const monthList: string[] = [
-		'Jan',
-		'Feb',
-		'Mar',
-		'Apr',
-		'May',
-		'Jun',
-		'Jul',
-		'Aug',
-		'Sep',
-		'Oct',
-		'Nov',
-		'Dec',
-	];
-
 	useEffect(() => {
 		fetch(`http://localhost:3000/budgeting/${propsSelectedYear}/${propsSelectedMonth}`)
 			.then(response => {

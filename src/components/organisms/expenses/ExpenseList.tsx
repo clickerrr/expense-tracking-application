@@ -6,23 +6,9 @@ import ExpenseForm from '@/components/organisms/expenses/ExpenseForm';
 import ExpenseListContext from '@/components/context/ExpenseContext';
 import CategoryListContext from '@/components//context/CategoryListContext';
 import ExpenseListElement from '@/components/atoms/expenses/ExpenseListElement';
+import monthList from '@/components/atoms/monthList';
 
 const ExpenseListView = () => {
-	const monthList: string[] = [
-		'Jan',
-		'Feb',
-		'Mar',
-		'Apr',
-		'May',
-		'Jun',
-		'Jul',
-		'Aug',
-		'Sep',
-		'Oct',
-		'Nov',
-		'Dec',
-	];
-
 	const expenseContext = useContext(ExpenseListContext);
 	const categoryContext = useContext(CategoryListContext);
 

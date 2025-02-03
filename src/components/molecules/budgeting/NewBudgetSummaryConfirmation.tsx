@@ -1,5 +1,7 @@
 import BudgetCategoryItem from '@/types/BudgetCategoryItem';
 import editLogo from '@/assets/edit-icon.svg';
+import StartingBalanceInput from '@/components/atoms/budgeting/StartingBalanceInput';
+import {useState} from 'react';
 
 interface NewBudgetSummaryConfirmationProps {
 	data: BudgetCategoryItem[][];
@@ -7,6 +9,8 @@ interface NewBudgetSummaryConfirmationProps {
 }
 
 const NewBudgetSummaryConfirmation = ({data, changePage}: NewBudgetSummaryConfirmationProps) => {
+	const [startingAmount, setStartingAmount] = useState<number>(0);
+
 	const returnProperTitle = (index: number) => {
 		switch (index) {
 			case 0:
@@ -59,6 +63,14 @@ const NewBudgetSummaryConfirmation = ({data, changePage}: NewBudgetSummaryConfir
 				return (
 					<>
 						<div className="new-budget-summary-edit">{returnProperTitle(index)}</div>
+
+						<div className="new-budget-starting-input">
+							<StartingBalanceInput
+								title={'Enter starting amount'}
+								value={startingAmount}
+								setValue={setStartingAmount}
+							/>
+						</div>
 
 						<table className="new-budget-table">
 							<tr>

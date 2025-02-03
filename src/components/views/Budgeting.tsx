@@ -5,21 +5,7 @@ import BudgetCategoryTable from '@/components/organisms/budgeting/BudgetCategory
 import BudgetCategoryItem from '@/types/BudgetCategoryItem';
 import BalanceView from '@/components/organisms/budgeting/BalanceView';
 import EditBudgetCategoryTable from '@/components/organisms/budgeting/EditBugetCategoryTable';
-
-const monthList = [
-	'Jan',
-	'Feb',
-	'Mar',
-	'Apr',
-	'May',
-	'Jun',
-	'Jul',
-	'Aug',
-	'Sep',
-	'Oct',
-	'Nov',
-	'Dec',
-];
+import monthList from '@/components/atoms/monthList';
 
 const Budgeting = () => {
 	const [budgetExists, setBudgetExists] = useState<boolean>(false);
@@ -52,37 +38,6 @@ const Budgeting = () => {
 			{id: 3, title: 'Other', planned: 50, actual: 100},
 		]);
 	}, []);
-
-	// useEffect(() => {
-	// 	const monthNumber = getMonthNumber(selectedMonth);
-	// 	fetch(`http://127.0.0.1:3000/budgeting/create/${selectedYear}/${monthNumber}`, {
-	// 		method: 'POST',
-	// 	})
-	// 		.then(response => {
-	// 			return response.json();
-	// 		})
-	// 		.then(result => {
-	// 			if (result === null) {
-	// 				setDisplayBudget(false);
-	// 			} else {
-	// 				setDisplayBudget(true);
-	// 			}
-	// 		});
-	// }, [selectedYear, selectedMonth]);
-
-	// const handleCreateBudget = () => {
-	// 	setDisplayBudget(true);
-	// 	const monthNumber = getMonthNumber(selectedMonth);
-	// 	fetch(`http://127.0.0.1:3000/budgeting/create/${selectedYear}/${monthNumber}`, {
-	// 		method: 'POST',
-	// 	})
-	// 		.then(response => {
-	// 			return response.json();
-	// 		})
-	// 		.then(result => {
-	// 			console.log(result);
-	// 		});
-	// };
 
 	const getMonthNumber = (inputMonth: string) => {
 		const monthIndex = monthList.findIndex((month: string) => {
