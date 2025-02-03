@@ -1,0 +1,15 @@
+.balance-view-parent {
+}
+
+.balance-view-container {
+	display: flex;
+	align-self: center;
+	text-align: end;
+	flex-direction: column;
+	width: 50%;
+}
+
+.balance-view-container p {
+	margin: 0;
+	margin-bottom: 0.5rem;
+}

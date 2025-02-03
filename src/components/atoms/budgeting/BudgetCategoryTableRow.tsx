@@ -16,6 +16,7 @@ const BudgetCategoryTableRow = ({category}: BudgetCategoryTableProps) => {
 					type={'number'}
 					onChange={event => {
 						setPlannedAmount(Number(event.target.value));
+						category.planned = Number(event.target.value);
 					}}
 					value={plannedAmount}
 				/>

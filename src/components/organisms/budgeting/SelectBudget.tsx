@@ -4,7 +4,13 @@ import CreateBudgetCategory from './CreateBudgetCategory';
 import NewBudgetCategory from './NewBudgetCategory';
 import NewBudgetForm from './NewBudgetForm';
 
-const SelectBudget = () => {
+interface SelectBudgetProps {
+	onSubmit: () => void;
+	passSelectedYear: (year: number) => void;
+	passSelectedMonth: (month: number) => void;
+}
+
+const SelectBudget = ({onSubmit, passSelectedYear, passSelectedMonth}: SelectBudgetProps) => {
 	const [yearList, setYearList] = useState<number[]>([new Date().getFullYear()]);
 	const monthList: string[] = [
 		'Jan',
@@ -37,6 +43,24 @@ const SelectBudget = () => {
 
 	const handleCompleteNewBudget = () => {
 		setShowingCategories(false);
+		console.log('selectedMonth', selectedMonth);
+		console.log('monthIndex', getMonthIndex(selectedMonth));
+		passSelectedMonth(getMonthIndex(selectedMonth));
+		passSelectedYear(selectedYear);
+		onSubmit();
+	};
+
+	const getMonthNumber = (inputMonth: string) => {
+		const monthIndex = monthList.findIndex((month: string) => {
+			return month === inputMonth;
+		});
+		return monthIndex + 1;
+	};
+
+	const getMonthIndex = (inputMonth: string) => {
+		return monthList.findIndex((month: string) => {
+			return month === inputMonth;
+		});
 	};
 
 	return (
@@ -66,7 +90,8 @@ const SelectBudget = () => {
 						className="form-input"
 						onChange={event => {
 							setShowingCategories(false);
-							setSelectedMonth(event.target.value);
+							console.log('event.target.value', event.target.value);
+							setSelectedMonth(monthList[Number(event.target.value)]);
 						}}
 						value={selectedMonth}>
 						{monthList.map((month: string, index: number) => {
@@ -83,6 +108,8 @@ const SelectBudget = () => {
 				<NewBudgetForm
 					onCancel={() => handleCancelCreateNewBudget()}
 					onComplete={() => handleCompleteNewBudget()}
+					selectedYear={selectedYear}
+					selectedMonth={1}
 				/>
 			) : (
 				<>
