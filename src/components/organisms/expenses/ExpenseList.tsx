@@ -15,7 +15,7 @@ const ExpenseListView = () => {
 	// const [expenses, setExpenses] = useState<Expense[]>([]);
 	const [filteredList, setFilteredList] = useState<Expense[]>([]);
 	const [yearFilter, setYearFilter] = useState<number>(new Date().getFullYear());
-	const [monthFilter, setMonthFilter] = useState<number | null>(null);
+	const [monthFilter, setMonthFilter] = useState<number | null>(new Date().getMonth());
 
 	const [availableYears, setAvailableYears] = useState<number[]>([]);
 
@@ -37,6 +37,7 @@ const ExpenseListView = () => {
 		// setExpenses([]);
 		setAvailableYears([]);
 		setFilteredList([]);
+
 		if (expenseContext !== undefined && categoryContext !== undefined) {
 			const yearsList = populateAvailableYears(expenseContext.expenseList);
 			setAvailableYears(yearsList);

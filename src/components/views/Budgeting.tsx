@@ -4,7 +4,7 @@ import SelectBudget from '@/components/organisms/budgeting/SelectBudget';
 import BudgetCategoryTable from '@/components/organisms/budgeting/BudgetCategoryTable';
 import BudgetCategoryItem from '@/types/BudgetCategoryItem';
 import BalanceView from '@/components/organisms/budgeting/BalanceView';
-import EditBudgetCategoryTable from '@/components/organisms/budgeting/EditBugetCategoryTable';
+import EditBudgetCategoryTable from '@/components/organisms/budgeting/EditBudgetCategoryTable';
 import monthList from '@/components/atoms/monthList';
 
 const Budgeting = () => {
@@ -15,29 +15,133 @@ const Budgeting = () => {
 	const [categoryToEdit, setCategoryToEdit] = useState<string>('Expenses');
 	const [dataToEdit, setDataToEdit] = useState<BudgetCategoryItem[]>([]);
 
+	const [startingBalance, setStartingBalnace] = useState<number>(0);
+	const [plannedSum, setPlannedSum] = useState<number>(0);
+	const [actualSum, setActualSum] = useState<number>(0);
+
 	const [expenseData, setExpenseData] = useState<BudgetCategoryItem[]>([]);
 	const [monthlyData, setMonthlyData] = useState<BudgetCategoryItem[]>([]);
 	const [incomeData, setIncomeData] = useState<BudgetCategoryItem[]>([]);
 
 	useEffect(() => {
-		setExpenseData([
-			{id: 1, title: 'Food', planned: 100, actual: 250},
-			{id: 2, title: 'Groceries', planned: 250, actual: 100},
-			{id: 3, title: 'Other', planned: 50, actual: 100},
-			{id: 1, title: 'Food', planned: 100, actual: 250},
-			{id: 2, title: 'Groceries', planned: 250, actual: 100},
-			{id: 2, title: 'Groceries', planned: 250, actual: 100},
-		]);
-		setMonthlyData([
-			{id: 1, title: 'Food', planned: 100, actual: 250},
-			{id: 2, title: 'Groceries', planned: 250, actual: 100},
-		]);
-		setIncomeData([
-			{id: 1, title: 'Food', planned: 100, actual: 250},
-			{id: 2, title: 'Groceries', planned: 250, actual: 100},
-			{id: 3, title: 'Other', planned: 50, actual: 100},
-		]);
+		const today = new Date();
+		console.log(today.getFullYear(), today.getMonth());
+		fetch(`http://127.0.0.1:3000/budgeting/${today.getFullYear()}/${today.getMonth() + 1}`)
+			.then(response => {
+				return response.json();
+			})
+			.then(result => {
+				console.log(result);
+				if (result.results.length === 0) {
+					setBudgetExists(false);
+				} else {
+					setBudgetExists(true);
+				}
+			});
+
+		fetch(
+			`http://127.0.0.1:3000/budgeting/${today.getFullYear()}/${
+				today.getMonth() + 1
+			}/Expenses`,
+		)
+			.then(response => {
+				return response.json();
+			})
+			.then(result => {
+				console.log('expenses result', result);
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				const expenses = result.results.map((element: any) => {
+					const newElement: BudgetCategoryItem = {
+						id: element.be_id,
+						title: element.cat_title,
+						planned: element.be_planned_amount,
+						actual: element.be_actual_amount,
+					};
+					return newElement;
+				});
+				setExpenseData(expenses);
+			});
+
+		fetch(
+			`http://127.0.0.1:3000/budgeting/${today.getFullYear()}/${today.getMonth() + 1}/Income`,
+		)
+			.then(response => {
+				return response.json();
+			})
+			.then(result => {
+				console.log('monthly result', result);
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				const monthly = result.results.map((element: any) => {
+					const newElement: BudgetCategoryItem = {
+						id: element.be_id,
+						title: element.cat_title,
+						planned: element.be_planned_amount,
+						actual: element.be_actual_amount,
+					};
+					return newElement;
+				});
+				setMonthlyData(monthly);
+			});
+
+		fetch(
+			`http://127.0.0.1:3000/budgeting/${today.getFullYear()}/${
+				today.getMonth() + 1
+			}/Monthly`,
+		)
+			.then(response => {
+				return response.json();
+			})
+			.then(result => {
+				console.log('income result', result);
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				const income = result.results.map((element: any) => {
+					const newElement: BudgetCategoryItem = {
+						id: element.be_id,
+						title: element.cat_title,
+						planned: element.be_planned_amount,
+						actual: element.be_actual_amount,
+					};
+					return newElement;
+				});
+				setIncomeData(income);
+			});
+
+		fetch(
+			`http://127.0.0.1:3000/budgeting/${today.getFullYear()}/${
+				today.getMonth() + 1
+			}/starting`,
+		)
+			.then(response => {
+				return response.json();
+			})
+			.then(result => {
+				setStartingBalnace(result.results.startingBalance);
+			});
+
+		fetch(
+			`http://127.0.0.1:3000/budgeting/${today.getFullYear()}/${
+				today.getMonth() + 1
+			}/planned`,
+		)
+			.then(response => {
+				return response.json();
+			})
+			.then(result => {
+				setPlannedSum(result.results.plannedSum);
+			});
+
+		fetch(
+			`http://127.0.0.1:3000/budgeting/${today.getFullYear()}/${today.getMonth() + 1}/actual`,
+		)
+			.then(response => {
+				return response.json();
+			})
+			.then(result => {
+				setActualSum(result.results.actualSum);
+			});
 	}, []);
+
+	useEffect(() => {}, []);
 
 	const getMonthNumber = (inputMonth: string) => {
 		const monthIndex = monthList.findIndex((month: string) => {
@@ -122,9 +226,9 @@ const Budgeting = () => {
 					) : (
 						<>
 							<BalanceView
-								startingBalance={5000}
-								projectedSpending={1250}
-								currentSpending={750}
+								startingBalance={startingBalance}
+								projectedSpending={plannedSum}
+								currentSpending={actualSum}
 							/>
 							<div className="category-section">
 								<BudgetCategoryTable
