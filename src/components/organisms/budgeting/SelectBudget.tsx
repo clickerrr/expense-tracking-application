@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import '@/styles/createnewbudget.css';
 import CreateBudgetCategory from './CreateBudgetCategory';
 import NewBudgetCategory from './NewBudgetCategory';
@@ -9,9 +9,15 @@ interface SelectBudgetProps {
 	onSubmit: () => void;
 	passSelectedYear: (year: number) => void;
 	passSelectedMonth: (month: number) => void;
+	onGoToBudget: (year: number, month: number) => void;
 }
 
-const SelectBudget = ({onSubmit, passSelectedYear, passSelectedMonth}: SelectBudgetProps) => {
+const SelectBudget = ({
+	onSubmit,
+	passSelectedYear,
+	passSelectedMonth,
+	onGoToBudget,
+}: SelectBudgetProps) => {
 	const [yearList, setYearList] = useState<number[]>([new Date().getFullYear()]);
 
 	const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
@@ -19,6 +25,38 @@ const SelectBudget = ({onSubmit, passSelectedYear, passSelectedMonth}: SelectBud
 	const [selectedMonth, setSelectedMonth] = useState<string>(monthList[new Date().getMonth()]);
 
 	const [showingCategories, setShowingCategories] = useState<boolean>(false);
+
+	const [budgetExists, setBudgetExists] = useState<boolean>(false);
+
+	useEffect(() => {
+		const generatedYearList = generateYearList(10);
+		setYearList(generatedYearList);
+
+		fetch(`http://127.0.0.1:3000/budgeting/${selectedYear}/${getMonthNumber(selectedMonth)}`)
+			.then(response => {
+				return response.json();
+			})
+			.then(result => {
+				console.log(result);
+				if (result.results.length !== 0) {
+					setBudgetExists(true);
+				} else {
+					setBudgetExists(false);
+				}
+			});
+	}, [onSubmit, selectedYear, selectedMonth]);
+
+	const generateYearList = (maxBack: number) => {
+		const yearList: number[] = [];
+		const firstYear = new Date().getFullYear();
+		yearList.push(firstYear);
+		let currentYear = new Date().getFullYear() - 1;
+		while (currentYear >= firstYear - maxBack) {
+			yearList.push(currentYear);
+			currentYear -= 1;
+		}
+		return yearList;
+	};
 
 	const onPressCreateBudget = () => {
 		setShowingCategories(true);
@@ -78,12 +116,12 @@ const SelectBudget = ({onSubmit, passSelectedYear, passSelectedMonth}: SelectBud
 						onChange={event => {
 							setShowingCategories(false);
 							console.log('event.target.value', event.target.value);
-							setSelectedMonth(monthList[Number(event.target.value)]);
+							setSelectedMonth(event.target.value);
 						}}
 						value={selectedMonth}>
 						{monthList.map((month: string, index: number) => {
 							return (
-								<option key={index} value={index}>
+								<option key={index} value={month}>
 									{month}
 								</option>
 							);
@@ -100,12 +138,27 @@ const SelectBudget = ({onSubmit, passSelectedYear, passSelectedMonth}: SelectBud
 				/>
 			) : (
 				<>
-					<h3>No Budget Found</h3>
-					<button
-						onClick={() => onPressCreateBudget()}
-						className="new-budget-create-button">
-						Create New Budget
-					</button>
+					{budgetExists ? (
+						<>
+							<h3>Budget Found</h3>
+							<button
+								className="new-budget-create-button"
+								onClick={() =>
+									onGoToBudget(selectedYear, getMonthIndex(selectedMonth))
+								}>
+								View Budget
+							</button>
+						</>
+					) : (
+						<>
+							<h3>No Budget Found</h3>
+							<button
+								onClick={() => onPressCreateBudget()}
+								className="new-budget-create-button">
+								Create New Budget
+							</button>
+						</>
+					)}
 				</>
 			)}
 		</div>
