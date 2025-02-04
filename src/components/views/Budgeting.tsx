@@ -26,7 +26,13 @@ const Budgeting = () => {
 	useEffect(() => {
 		const today = new Date();
 		console.log(today.getFullYear(), today.getMonth());
-		fetch(`http://127.0.0.1:3000/budgeting/${today.getFullYear()}/${today.getMonth() + 1}`)
+
+		fetchBudget(today.getFullYear(), today.getMonth());
+		fetchBudgetExpenses(today.getFullYear(), today.getMonth());
+	}, []);
+
+	const fetchBudget = (year: number, month: number) => {
+		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}`)
 			.then(response => {
 				return response.json();
 			})
@@ -38,12 +44,10 @@ const Budgeting = () => {
 					setBudgetExists(true);
 				}
 			});
+	};
 
-		fetch(
-			`http://127.0.0.1:3000/budgeting/${today.getFullYear()}/${
-				today.getMonth() + 1
-			}/Expenses`,
-		)
+	const fetchBudgetExpenses = (year: number, month: number) => {
+		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}/Expenses`)
 			.then(response => {
 				return response.json();
 			})
@@ -62,9 +66,7 @@ const Budgeting = () => {
 				setExpenseData(expenses);
 			});
 
-		fetch(
-			`http://127.0.0.1:3000/budgeting/${today.getFullYear()}/${today.getMonth() + 1}/Income`,
-		)
+		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}/Income`)
 			.then(response => {
 				return response.json();
 			})
@@ -83,11 +85,7 @@ const Budgeting = () => {
 				setMonthlyData(monthly);
 			});
 
-		fetch(
-			`http://127.0.0.1:3000/budgeting/${today.getFullYear()}/${
-				today.getMonth() + 1
-			}/Monthly`,
-		)
+		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}/Monthly`)
 			.then(response => {
 				return response.json();
 			})
@@ -106,11 +104,7 @@ const Budgeting = () => {
 				setIncomeData(income);
 			});
 
-		fetch(
-			`http://127.0.0.1:3000/budgeting/${today.getFullYear()}/${
-				today.getMonth() + 1
-			}/starting`,
-		)
+		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}/starting`)
 			.then(response => {
 				return response.json();
 			})
@@ -118,11 +112,7 @@ const Budgeting = () => {
 				setStartingBalnace(result.results.startingBalance);
 			});
 
-		fetch(
-			`http://127.0.0.1:3000/budgeting/${today.getFullYear()}/${
-				today.getMonth() + 1
-			}/planned`,
-		)
+		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}/planned`)
 			.then(response => {
 				return response.json();
 			})
@@ -130,16 +120,14 @@ const Budgeting = () => {
 				setPlannedSum(result.results.plannedSum);
 			});
 
-		fetch(
-			`http://127.0.0.1:3000/budgeting/${today.getFullYear()}/${today.getMonth() + 1}/actual`,
-		)
+		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}/actual`)
 			.then(response => {
 				return response.json();
 			})
 			.then(result => {
 				setActualSum(result.results.actualSum);
 			});
-	}, []);
+	};
 
 	useEffect(() => {}, []);
 
@@ -198,7 +186,12 @@ const Budgeting = () => {
 			<div className="header">
 				<h1>Budgeting</h1>
 				{budgetExists ? (
-					<h2 className="date-title">{`${monthList[selectedMonth]} ${selectedYear}`}</h2>
+					<div className="sub-header">
+						<h2 className="date-title">{`${monthList[selectedMonth]} ${selectedYear}`}</h2>
+						<button className="button" onClick={() => setBudgetExists(false)}>
+							View Different Budget
+						</button>
+					</div>
 				) : (
 					<></>
 				)}
@@ -222,6 +215,10 @@ const Budgeting = () => {
 							passSelectedMonth={(passedMonth: number) =>
 								setSelectedMonth(passedMonth)
 							}
+							onGoToBudget={(year: number, month: number) => {
+								fetchBudgetExpenses(year, month);
+								setBudgetExists(true);
+							}}
 						/>
 					) : (
 						<>
