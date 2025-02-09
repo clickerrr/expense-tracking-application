@@ -17,7 +17,7 @@ const BudgetCategoryTable = ({title, budgetData, onEdit}: BudgetTableProps) => {
 		sumTotal('planned', setTotalPlanned);
 		sumTotal('actual', setTotalActual);
 		sumDifference();
-	}, [title, budgetData]);
+	}, [title, budgetData, displayData]);
 
 	const [totalPlanned, setTotalPlanned] = useState<number>(0);
 	const [totalActual, setTotalActual] = useState<number>(0);

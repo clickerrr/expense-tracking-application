@@ -1,5 +1,5 @@
 import BudgetCategoryItem from '@/types/BudgetCategoryItem';
-import BudgetCategoryTable from './BudgetCategoryTable';
+import NewBudgetCategoryTable from './NewBudgetCategoryTable';
 
 interface NewMonthlyIncomeProps {
 	incomeCategories: BudgetCategoryItem[];
@@ -11,9 +11,10 @@ const NewMonthlyIncome = ({incomeCategories, setIncomeCategories}: NewMonthlyInc
 		<div className="new-budget-category-form">
 			<h2>Enter Expected Monthly Income</h2>
 			<p>Here, enter how much money you expect to make by the end of the month.</p>
-			<BudgetCategoryTable
+			<NewBudgetCategoryTable
 				propsCategories={incomeCategories}
 				setPropsCategories={setIncomeCategories}
+				onRemoveElement={(data: BudgetCategoryItem) => {}}
 			/>
 		</div>
 	);

@@ -6,7 +6,7 @@ import NewBudgetForm from './NewBudgetForm';
 import monthList from '@/components/atoms/monthList';
 
 interface SelectBudgetProps {
-	onSubmit: () => void;
+	onSubmit: (year: number, month: number) => void;
 	passSelectedYear: (year: number) => void;
 	passSelectedMonth: (month: number) => void;
 	onGoToBudget: (year: number, month: number) => void;
@@ -72,7 +72,7 @@ const SelectBudget = ({
 		console.log('monthIndex', getMonthIndex(selectedMonth));
 		passSelectedMonth(getMonthIndex(selectedMonth));
 		passSelectedYear(selectedYear);
-		onSubmit();
+		onSubmit(selectedYear, getMonthIndex(selectedMonth));
 	};
 
 	const getMonthNumber = (inputMonth: string) => {
@@ -134,7 +134,7 @@ const SelectBudget = ({
 					onCancel={() => handleCancelCreateNewBudget()}
 					onComplete={() => handleCompleteNewBudget()}
 					selectedYear={selectedYear}
-					selectedMonth={1}
+					selectedMonth={getMonthIndex(selectedMonth)}
 				/>
 			) : (
 				<>

@@ -6,10 +6,17 @@ import {useState} from 'react';
 interface NewBudgetSummaryConfirmationProps {
 	data: BudgetCategoryItem[][];
 	changePage: (pageNumber: number) => void;
+	startingAmount: number;
+	setStartingAmount: (newBalance: number) => void;
 }
 
-const NewBudgetSummaryConfirmation = ({data, changePage}: NewBudgetSummaryConfirmationProps) => {
-	const [startingAmount, setStartingAmount] = useState<number>(0);
+const NewBudgetSummaryConfirmation = ({
+	data,
+	changePage,
+	startingAmount,
+	setStartingAmount,
+}: NewBudgetSummaryConfirmationProps) => {
+	// const [startingAmount, setStartingAmount] = useState<number>(0);
 
 	const returnProperTitle = (index: number) => {
 		switch (index) {
@@ -64,14 +71,6 @@ const NewBudgetSummaryConfirmation = ({data, changePage}: NewBudgetSummaryConfir
 					<>
 						<div className="new-budget-summary-edit">{returnProperTitle(index)}</div>
 
-						<div className="new-budget-starting-input">
-							<StartingBalanceInput
-								title={'Enter starting amount'}
-								value={startingAmount}
-								setValue={setStartingAmount}
-							/>
-						</div>
-
 						<table className="new-budget-table">
 							<tr>
 								<th>Category</th>
@@ -96,6 +95,13 @@ const NewBudgetSummaryConfirmation = ({data, changePage}: NewBudgetSummaryConfir
 		<div className="new-budget-category-form">
 			<h1>Summary</h1>
 			<p>Make sure everything here looks good to you!</p>
+			<div className="new-budget-starting-input">
+				<StartingBalanceInput
+					title={'Enter starting amount'}
+					value={startingAmount}
+					setValue={setStartingAmount}
+				/>
+			</div>
 			{renderTables()}
 		</div>
 	);

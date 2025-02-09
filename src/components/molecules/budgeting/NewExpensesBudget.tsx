@@ -1,7 +1,8 @@
 import BudgetCategoryItem from '@/types/BudgetCategoryItem';
-import BudgetCategoryTable from './BudgetCategoryTable';
+import BudgetCategoryTable from './NewBudgetCategoryTable';
 import {useEffect} from 'react';
 import '@/styles/newbudgetform.css';
+import NewBudgetCategoryTable from './NewBudgetCategoryTable';
 
 interface NewExpensesBudgetProps {
 	expenseCategories: BudgetCategoryItem[];
@@ -15,9 +16,10 @@ const NewExpensesBudget = ({expenseCategories, setCategories}: NewExpensesBudget
 			<p className="subtitle">
 				Here, define how much you wish to spend based on each category
 			</p>
-			<BudgetCategoryTable
+			<NewBudgetCategoryTable
 				propsCategories={expenseCategories}
 				setPropsCategories={setCategories}
+				onRemoveElement={(data: BudgetCategoryItem) => {}}
 			/>
 		</div>
 	);

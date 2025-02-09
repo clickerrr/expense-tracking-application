@@ -1,5 +1,5 @@
 import '@/styles/budgetbalanceview.css';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 
 interface BalanceViewProps {
 	startingBalance: number;
@@ -8,10 +8,16 @@ interface BalanceViewProps {
 }
 
 const BalanceView = ({startingBalance, projectedSpending, currentSpending}: BalanceViewProps) => {
-	useEffect(() => {}, [startingBalance, projectedSpending, currentSpending]);
+	useEffect(() => {
+		console.log(startingBalance);
+		console.log(projectedSpending);
+		console.log(currentSpending);
+		setProjectedBalance(startingBalance - projectedSpending);
+		setActualBalance(startingBalance - currentSpending);
+	}, [startingBalance, projectedSpending, currentSpending]);
 
-	const projectedBalance = startingBalance - projectedSpending;
-	const actualBalance = startingBalance - currentSpending;
+	const [projectedBalance, setProjectedBalance] = useState<number>(0);
+	const [actualBalance, setActualBalance] = useState<number>(0);
 
 	return (
 		// <div>
