@@ -1,4 +1,3 @@
-import BudgetCategoryTable from '@/components/molecules/budgeting/NewBudgetCategoryTable';
 import BudgetCategoryItem from '@/types/BudgetCategoryItem';
 import '@/styles/editbudget.css';
 import {useEffect, useState} from 'react';
@@ -41,7 +40,7 @@ const EditBudgetCategoryTable = ({
 	};
 
 	const addNewCategory = (newData: BudgetCategoryItem[]) => {
-		console.log(newData);
+		console.log('newData', newData);
 		setEditingData(newData);
 	};
 
