@@ -1,13 +1,18 @@
-import BudgetCategoryTable from '@/components/molecules/budgeting/BudgetCategoryTable';
+import BudgetCategoryTable from '@/components/molecules/budgeting/NewBudgetCategoryTable';
 import BudgetCategoryItem from '@/types/BudgetCategoryItem';
 import '@/styles/editbudget.css';
 import {useEffect, useState} from 'react';
+import NewBudgetCategoryTable from '@/components/molecules/budgeting/NewBudgetCategoryTable';
 
 interface EditBudgetCategoryTableProps {
 	title: string;
 	data: BudgetCategoryItem[];
 	onCancel: () => void;
-	onCompleteEditing: (title: string, newData: BudgetCategoryItem[]) => void;
+	onCompleteEditing: (
+		title: string,
+		newData: BudgetCategoryItem[],
+		deletedData: BudgetCategoryItem[],
+	) => void;
 }
 
 const EditBudgetCategoryTable = ({
@@ -25,6 +30,15 @@ const EditBudgetCategoryTable = ({
 	}, [title, data, onCompleteEditing]);
 
 	const [editingData, setEditingData] = useState<BudgetCategoryItem[]>(data);
+	const [deletedData, setDeletedData] = useState<BudgetCategoryItem[]>([]);
+
+	const removeCategory = (removedData: BudgetCategoryItem) => {
+		const filteredList = editingData.filter((element: BudgetCategoryItem) => {
+			return element.id !== removedData.id;
+		});
+		setDeletedData([...deletedData, removedData]);
+		setEditingData(filteredList);
+	};
 
 	const addNewCategory = (newData: BudgetCategoryItem[]) => {
 		console.log(newData);
@@ -41,16 +55,18 @@ const EditBudgetCategoryTable = ({
 					</button>
 				</div>
 				<div className="table-container">
-					<BudgetCategoryTable
+					<NewBudgetCategoryTable
 						propsCategories={editingData}
 						setPropsCategories={addNewCategory}
+						onRemoveElement={removeCategory}
 					/>
 				</div>
 				<div className="footer-button-group">
 					<button
 						className="done-button"
 						onClick={() => {
-							onCompleteEditing(title, editingData);
+							console.log('DELETED CATEGORIES', deletedData);
+							onCompleteEditing(title, editingData, deletedData);
 						}}>
 						Done
 					</button>

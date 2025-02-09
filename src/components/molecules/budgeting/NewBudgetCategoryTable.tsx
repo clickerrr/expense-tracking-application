@@ -2,11 +2,16 @@ import BudgetCategoryItem from '@/types/BudgetCategoryItem';
 import BudgetCategoryTableRow from '../../atoms/budgeting/BudgetCategoryTableRow';
 import {useEffect, useState} from 'react';
 import NewBudgetCategoryRow from '@/components/atoms/budgeting/NewBudgetCategoryRow';
-interface BudgetCategoryTableProps {
+interface NewBudgetCategoryTableProps {
 	propsCategories: BudgetCategoryItem[];
 	setPropsCategories: (data: BudgetCategoryItem[]) => void;
+	onRemoveElement: (data: BudgetCategoryItem) => void;
 }
-const BudgetCategoryTable = ({propsCategories, setPropsCategories}: BudgetCategoryTableProps) => {
+const NewBudgetCategoryTable = ({
+	propsCategories,
+	setPropsCategories,
+	onRemoveElement,
+}: NewBudgetCategoryTableProps) => {
 	const [addingNewCategory, setAddingNewCategory] = useState<boolean>(false);
 	const [categories, setCategories] = useState<BudgetCategoryItem[]>(propsCategories);
 	useEffect(() => {
@@ -26,6 +31,7 @@ const BudgetCategoryTable = ({propsCategories, setPropsCategories}: BudgetCatego
 			const newList = categories.filter((_, index: number) => {
 				return index !== foundIndex;
 			});
+			onRemoveElement(data);
 			setPropsCategories([...newList]);
 		}
 	};
@@ -76,4 +82,4 @@ const BudgetCategoryTable = ({propsCategories, setPropsCategories}: BudgetCatego
 		</>
 	);
 };
-export default BudgetCategoryTable;
+export default NewBudgetCategoryTable;

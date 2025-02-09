@@ -15,7 +15,7 @@ const Budgeting = () => {
 	const [categoryToEdit, setCategoryToEdit] = useState<string>('Expenses');
 	const [dataToEdit, setDataToEdit] = useState<BudgetCategoryItem[]>([]);
 
-	const [startingBalance, setStartingBalnace] = useState<number>(0);
+	const [startingBalance, setStartingBalance] = useState<number>(0);
 	const [plannedSum, setPlannedSum] = useState<number>(0);
 	const [actualSum, setActualSum] = useState<number>(0);
 
@@ -63,10 +63,15 @@ const Budgeting = () => {
 					};
 					return newElement;
 				});
+
+				console.log('Setting expenses data', expenses);
 				setExpenseData(expenses);
+			})
+			.catch(error => {
+				console.error(error);
 			});
 
-		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}/Income`)
+		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}/Monthly`)
 			.then(response => {
 				return response.json();
 			})
@@ -82,10 +87,11 @@ const Budgeting = () => {
 					};
 					return newElement;
 				});
+				console.log('Setting monthly data', monthly);
 				setMonthlyData(monthly);
 			});
 
-		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}/Monthly`)
+		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}/Income`)
 			.then(response => {
 				return response.json();
 			})
@@ -101,6 +107,7 @@ const Budgeting = () => {
 					};
 					return newElement;
 				});
+				console.log('Setting income data', income);
 				setIncomeData(income);
 			});
 
@@ -109,7 +116,7 @@ const Budgeting = () => {
 				return response.json();
 			})
 			.then(result => {
-				setStartingBalnace(result.results.startingBalance);
+				setStartingBalance(result.results.startingBalance);
 			});
 
 		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}/planned`)
@@ -117,6 +124,9 @@ const Budgeting = () => {
 				return response.json();
 			})
 			.then(result => {
+				console.log(year, month);
+				console.log('SETTING PLANNED SUM', result.results.plannedSum);
+				console.log(result);
 				setPlannedSum(result.results.plannedSum);
 			});
 
@@ -129,7 +139,92 @@ const Budgeting = () => {
 			});
 	};
 
-	useEffect(() => {}, []);
+	const remoteInsertNewCategories = async (
+		year: number,
+		month: number,
+		categoryList: BudgetCategoryItem[],
+		categoryTitle: string,
+	) => {
+		console.log('categoryTitle', categoryTitle);
+		console.log('categoryList', categoryList);
+		const requestHeaders = new Headers();
+		requestHeaders.append('Content-Type', 'application/json');
+		categoryList.forEach((element: BudgetCategoryItem) => {
+			fetch(`http://127.0.0.1:3000/budgeting/category/${year}/${month + 1}`, {
+				method: 'POST',
+				body: JSON.stringify({
+					title: element.title,
+					budgetType: categoryTitle,
+					plannedAmount: element.planned,
+				}),
+				headers: requestHeaders,
+			})
+				.then(response => {
+					return response.json();
+				})
+				.then(result => {
+					element.id = result.results.id;
+				});
+		});
+	};
+
+	const remoteUpdateCategories = async (
+		year: number,
+		month: number,
+		categoryList: BudgetCategoryItem[],
+		categoryTitle: string,
+	) => {
+		const requestHeaders = new Headers();
+		requestHeaders.append('Content-Type', 'application/json');
+		categoryList.forEach((element: BudgetCategoryItem) => {
+			fetch(`http://127.0.0.1:3000/budgeting/category/${year}/${month + 1}`, {
+				method: 'PATCH',
+				body: JSON.stringify({
+					id: element.id,
+					title: element.title,
+					budgetType: categoryTitle,
+					plannedAmount: element.planned,
+					actualAmount: element.actual,
+				}),
+				headers: requestHeaders,
+			})
+				.then(response => {
+					return response.json();
+				})
+				.then(result => {
+					console.log(result.results);
+					if (element.id === -1) {
+						element.id = result.results.id;
+					}
+				});
+		});
+		return;
+	};
+
+	const remoteDeleteCategories = async (
+		year: number,
+		month: number,
+		categoryList: BudgetCategoryItem[],
+	) => {
+		const requestHeaders = new Headers();
+		requestHeaders.append('Content-Type', 'application/json');
+		categoryList.forEach((element: BudgetCategoryItem) => {
+			fetch(`http://127.0.0.1:3000/budgeting/category/${year}/${month + 1}`, {
+				method: 'DELETE',
+				body: JSON.stringify({
+					id: element.id,
+				}),
+				headers: requestHeaders,
+			})
+				.then(response => {
+					return response.json();
+				})
+				.then(result => {
+					console.log(result.results);
+				});
+		});
+		return;
+	};
 
 	const getMonthNumber = (inputMonth: string) => {
 		const monthIndex = monthList.findIndex((month: string) => {
@@ -163,22 +258,39 @@ const Budgeting = () => {
 		setEditingBudget(true);
 	};
 
-	const completeEditing = (title: string, newData: BudgetCategoryItem[]) => {
+	const completeEditing = (
+		title: string,
+		newData: BudgetCategoryItem[],
+		deletedData: BudgetCategoryItem[],
+	) => {
+		console.log('Done editing, running');
 		setEditingBudget(false);
-		switch (title) {
-			case 'Expenses':
-				setExpenseData(newData);
-				break;
-			case 'Monthly Payments':
-				setMonthlyData(newData);
-				break;
-			case 'Income':
-				setIncomeData(newData);
-				break;
-			default:
-				console.error('Invalid expense category passed to triggerEdit');
-				return;
-		}
+		remoteUpdateCategories(
+			selectedYear,
+			selectedMonth,
+			newData,
+			title === 'Monthly Payments' ? 'Monthly' : title,
+		).then(() => {
+			remoteDeleteCategories(selectedYear, selectedMonth, deletedData).then(() => {
+				fetchBudgetExpenses(selectedYear, selectedMonth);
+			});
+			console.log('Fetching data...');
+		});
+
+		// switch (title) {
+		// 	case 'Expenses':
+		// 		setExpenseData(newData);
+		// 		break;
+		// 	case 'Monthly Payments':
+		// 		setMonthlyData(newData);
+		// 		break;
+		// 	case 'Income':
+		// 		setIncomeData(newData);
+		// 		break;
+		// 	default:
+		// 		console.error('Invalid expense category passed to triggerEdit');
+		// 		return;
+		// }
 	};
 
 	return (
@@ -208,14 +320,20 @@ const Budgeting = () => {
 				<div className="container">
 					{!budgetExists ? (
 						<SelectBudget
-							onSubmit={() => {
+							onSubmit={(year, month) => {
 								setBudgetExists(true);
+								setSelectedYear(year);
+								setSelectedMonth(month);
+								console.log('Fetching budget right now');
+								fetchBudgetExpenses(year, month);
 							}}
 							passSelectedYear={(passedYear: number) => setSelectedYear(passedYear)}
 							passSelectedMonth={(passedMonth: number) =>
 								setSelectedMonth(passedMonth)
 							}
 							onGoToBudget={(year: number, month: number) => {
+								setSelectedYear(year);
+								setSelectedMonth(month);
 								fetchBudgetExpenses(year, month);
 								setBudgetExists(true);
 							}}
