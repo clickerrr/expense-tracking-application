@@ -23,7 +23,12 @@ const BalanceView = ({startingBalance, projectedSpending, currentSpending}: Bala
 		// <div>
 		<div className="balance-view-container">
 			<p>Starting Monthly Balance: ${startingBalance}</p>
-			<p>Projected Ending Balance: ${projectedBalance}</p>
+			<p>
+				Projected Ending Balance: $
+				<span className={`${projectedBalance >= 0 ? 'green-text' : 'red-text'}`}>
+					{projectedBalance}
+				</span>
+			</p>
 			<p>
 				Current Ending Balance: $
 				<span className={`${actualBalance >= 0 ? 'green-text' : 'red-text'}`}>
