@@ -46,7 +46,7 @@ const EntryComponent = () => {
 			.then(result => {
 				const categories = [];
 				console.log('category result', result);
-				result.forEach(item => {
+				result.results.forEach(item => {
 					const newCategory = {
 						id: item['cat_id'],
 						title: item['cat_title'],
