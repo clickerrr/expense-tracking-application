@@ -9,9 +9,9 @@ interface BalanceViewProps {
 
 const BalanceView = ({startingBalance, projectedSpending, currentSpending}: BalanceViewProps) => {
 	useEffect(() => {
-		console.log(startingBalance);
-		console.log(projectedSpending);
-		console.log(currentSpending);
+		console.log('startingBalance', startingBalance);
+		console.log('projectedSpending', projectedSpending);
+		console.log('currentSpending', currentSpending);
 		setProjectedBalance(startingBalance - projectedSpending);
 		setActualBalance(startingBalance - currentSpending);
 	}, [startingBalance, projectedSpending, currentSpending]);
