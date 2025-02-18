@@ -28,21 +28,23 @@ const ExpenseListElement = ({
 			<span className="text">{element.date.toLocaleDateString('en-us')}</span>
 			<span className="text">{element.category.title}</span>
 			<span className="text">${element.amount}</span>
-			<button
-				onClick={() => {
-					handleUpdateExpense(index);
-				}}
-				className="edit-logo">
-				<img src={editLogo} />
-			</button>
-			<button
-				onClick={() => {
-					handleDeleteExpense(element);
-				}}
-				className={`edit-logo`}
-				disabled={!deleteMode}>
-				<img src={trashLogo} />
-			</button>
+			<div className="options">
+				<button
+					onClick={() => {
+						handleUpdateExpense(index);
+					}}
+					className="edit-logo">
+					<img src={editLogo} />
+				</button>
+				<button
+					onClick={() => {
+						handleDeleteExpense(element);
+					}}
+					className={`edit-logo ${!deleteMode ? 'disabled-button' : ''}`}
+					disabled={!deleteMode}>
+					<img src={trashLogo} />
+				</button>
+			</div>
 		</div>
 	);
 };

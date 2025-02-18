@@ -30,12 +30,12 @@ const BudgetCategoryTable = ({title, budgetData, onEdit}: BudgetTableProps) => {
 			const found = objectKeys.findIndex(element => {
 				return element === field;
 			});
-			console.log('found', found);
 			if (found) {
 				totalSum += Number(Object.values(element)[found]);
 			}
 		});
-		setter(totalSum);
+
+		setter(Math.round(totalSum * 100) / 100);
 	};
 
 	const sumDifference = () => {
@@ -43,7 +43,8 @@ const BudgetCategoryTable = ({title, budgetData, onEdit}: BudgetTableProps) => {
 		displayData.forEach((element: BudgetCategoryItem) => {
 			totalDifference += element.planned - element.actual;
 		});
-		setTotalDiff(totalDifference);
+
+		setTotalDiff(Math.round(totalDifference * 100) / 100);
 	};
 
 	const renderHeadColumns = () => {
@@ -93,9 +94,9 @@ const BudgetCategoryTable = ({title, budgetData, onEdit}: BudgetTableProps) => {
 				<tr key={element.id} className="table-row">
 					<td className="table-row-element">{element.title}</td>
 					<td className="table-row-element">${element.planned}</td>
-					<td className="table-row-element">${element.actual}</td>
+					<td className="table-row-element">${Math.round(element.actual * 100) / 100}</td>
 					<td className={`table-row-element ${diff >= 0 ? 'green-text' : 'red-text'}`}>
-						${element.planned - element.actual}
+						${Math.round((element.planned - element.actual) * 100) / 100}
 					</td>
 				</tr>
 			);

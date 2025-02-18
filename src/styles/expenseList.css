@@ -10,76 +10,89 @@
 	font-weight: bold;
 }
 
-.expense-list-header {
+.expense-list {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 500px;
+	overflow-y: scroll;
+}
+
+.expense-list .expense-list-header {
+	width: 100%;
 	display: flex;
 	flex-direction: row;
-	justify-content: space-evenly;
 	align-items: center;
+	font-weight: bold;
 }
 
 .expense-list-header * {
-	text-align: center;
-}
-
-.expense-list-header .date-container {
-	cursor: pointer;
+	width: 20%;
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-	flex-wrap: nowrap;
 }
 
-.expense-list-header .sort-icon {
-	transition: 0.25s cubic-bezier(1, 0, 0, 1);
+.expense-list-body .item {
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 0.45rem;
+	padding-top: 0.25rem;
+	padding-bottom: 0.25rem;
+}
+
+.item * {
 	width: 20%;
-	height: auto;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	text-align: center;
+	align-items: center;
 }
 
-.expense-list-header .rotate-icon {
+.date-container {
+	display: flex;
+	justify-content: space-evenly;
+	cursor: pointer;
+	background: none;
+	border: none;
+	font-weight: bold;
+	font-size: 1rem;
+}
+
+.sort-icon {
+	transition: 0.25s cubic-bezier(1, 0, 0, 1);
+}
+
+.rotate-icon {
 	transform: rotate(180deg);
 }
 
-.expense-list {
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	align-items: center;
-	overflow-y: scroll;
-	height: 500px;
-	margin-top: 10px;
-}
-
-.expense-list .item {
-	width: 100%;
-	display: flex;
+.item td {
+	/* display: flex; */
+	height: 10px;
 	flex-direction: row;
-	justify-content: space-evenly;
-	margin-top: 5px;
-	margin-bottom: 5px;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	text-wrap: wrap;
-}
-
-.item .text {
-	text-align: center;
-	margin-left: 10px;
-	margin-right: 10px;
-}
-
-.item .grow {
-	flex-grow: 2;
+	justify-content: center;
+	align-items: flex-start;
 }
 
 .edit-logo {
 	margin-right: 10px;
-	min-width: 5%;
-	width: 5%;
+	min-width: 10%;
+	width: 10%;
+	height: auto;
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
+	background: none;
+	border: none;
+}
+
+.edit-logo:hover {
+	cursor: pointer;
 }
 
 .edit-logo img {
@@ -87,8 +100,16 @@
 	object-fit: contain;
 	min-width: 20px;
 	min-height: 20px;
-	width: 20px;
-	height: 20px;
+	width: 1em;
+	height: 1em;
+}
+
+.disabled-button {
+	opacity: 0.5;
+}
+
+.disabled-button:hover {
+	cursor: not-allowed;
 }
 
 .expense-filters {
@@ -206,3 +227,66 @@
 /* Styles for large screens (desktops) */
 @media (min-width: 769px) {
 }
+
+/*.expense-list-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	align-items: center;
+}
+
+.expense-list-header * {
+	text-align: center;
+}
+
+.expense-list-header .date-container {
+	cursor: pointer;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: nowrap;
+}
+
+.expense-list-header .sort-icon {
+	transition: 0.25s cubic-bezier(1, 0, 0, 1);
+	width: 20%;
+	height: auto;
+}
+
+.expense-list-header .rotate-icon {
+	transform: rotate(180deg);
+}
+
+.expense-list {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	overflow-y: scroll;
+	height: 500px;
+	margin-top: 10px;
+}
+
+.expense-list .item {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	text-wrap: wrap;
+}
+
+.item .text {
+	text-align: center;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.item .grow {
+	flex-grow: 2;
+
+*/

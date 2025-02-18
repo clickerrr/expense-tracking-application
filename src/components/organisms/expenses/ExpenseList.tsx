@@ -368,25 +368,28 @@ const ExpenseListView = () => {
 					<></>
 				)}
 			</div>
-			<div className="expense-list-header">
-				<span>Expense Name</span>
-				<div
-					className="date-container"
-					onClick={() => {
-						setFilterAscending(filterAscending => !filterAscending);
-						sortList(filteredList);
-					}}>
-					<span>Expense Date</span>
-					<img
-						src={sortIcon}
-						className={`sort-icon ${filterAscending ? 'rotate-icon' : ''}`}
-					/>
+			<div className="expense-list">
+				<div className="expense-list-header">
+					<span>Expense Name</span>
+
+					<button
+						className="date-container"
+						onClick={() => {
+							setFilterAscending(filterAscending => !filterAscending);
+							sortList(filteredList);
+						}}>
+						<span>Expense Date</span>
+						<img
+							src={sortIcon}
+							className={`sort-icon ${filterAscending ? 'rotate-icon' : ''}`}
+						/>
+					</button>
+					<span>Expense Category</span>
+					<span>Amount</span>
+					<span>Options</span>
 				</div>
-				<span>Expense Category</span>
-				<span>Amount</span>
-				<span>Options</span>
+				<div className="expense-list-body">{renderList()}</div>
 			</div>
-			<div className="expense-list">{renderList()}</div>
 
 			<div className="total-amount-container">
 				<span>Total Spent: ${totalAmountSpent}</span>
