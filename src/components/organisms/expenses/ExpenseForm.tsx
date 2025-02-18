@@ -25,8 +25,16 @@ const ExpenseForm = ({onClose, onSubmitExpense, documentToEdit}: ExpenseAdderPro
 	const [categoryList, setCategoryList] = useState<Category[]>([]);
 
 	useEffect(() => {
+		if (categoryContext === undefined) {
+			setCategoryList([]);
+		} else {
+			setCategoryList(categoryContext.categoryList);
+			if (categoryContext.categoryList.length !== 0) {
+				setCategory(categoryContext.categoryList[2].title);
+			}
+		}
+
 		if (documentToEdit !== undefined && documentToEdit !== null) {
-			console.log('Editing element');
 			const docId = documentToEdit.id;
 			if (docId) {
 				const currentName = documentToEdit.name;
@@ -45,23 +53,11 @@ const ExpenseForm = ({onClose, onSubmitExpense, documentToEdit}: ExpenseAdderPro
 		} else {
 			setName('');
 			setAmount(0);
-			setCategory('');
 			setDateDisplay('');
-		}
-
-		if (categoryContext === undefined) {
-			setCategoryList([]);
-		} else {
-			setCategoryList(categoryContext.categoryList);
-			if (categoryContext.categoryList.length !== 0) {
-				setCategory(categoryContext.categoryList[2].title);
-				console.log('category set', categoryContext.categoryList[2].title);
-			}
 		}
 	}, [documentToEdit, categoryContext]);
 
 	const addExpense = () => {
-		console.log('[ADDING EXPENSE] expense title', category);
 		if (amount === null || amount <= 0) {
 			setErrorText('Please enter a valid positive number');
 			return;
@@ -81,8 +77,6 @@ const ExpenseForm = ({onClose, onSubmitExpense, documentToEdit}: ExpenseAdderPro
 
 		if (documentToEdit !== null && documentToEdit !== undefined) {
 			if (documentToEdit.id) {
-				console.log('Passing edited document');
-
 				const editedDocument: Expense = {
 					id: documentToEdit.id,
 					name: name,
@@ -103,7 +97,6 @@ const ExpenseForm = ({onClose, onSubmitExpense, documentToEdit}: ExpenseAdderPro
 			category: categoryData,
 			date: date,
 		};
-		console.log(newExpense);
 
 		onClose();
 		onSubmitExpense(newExpense);

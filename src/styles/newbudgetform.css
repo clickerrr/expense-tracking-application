@@ -123,3 +123,26 @@
 .new-budget-starting-input {
 	margin-bottom: 1em;
 }
+
+/* Styles for small screens (mobile) */
+@media (max-width: 480px) {
+	.new-budget-form-container {
+		width: 95%;
+		height: 90%;
+	}
+	.new-budget-category-form {
+		width: 100%;
+	}
+}
+
+/* Styles for medium screens (tablets) */
+@media (min-width: 481px) and (max-width: 768px) {
+	.new-budget-form-container {
+		width: 85%;
+		height: 90%;
+	}
+}
+
+/* Styles for large screens (desktops) */
+@media (min-width: 769px) {
+}

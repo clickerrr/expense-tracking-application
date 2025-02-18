@@ -14,13 +14,11 @@
 .header .date-title {
 	justify-self: center;
 	align-self: center;
-	/* background-color: green; */
 }
 
 .sub-header {
 	display: flex;
 	flex-direction: row;
-	/* background-color: red; */
 	align-items: center;
 	justify-content: space-evenly;
 }
@@ -29,7 +27,6 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	/* background-color: blue; */
 	flex-direction: column;
 }
 
@@ -60,4 +57,26 @@
 }
 .button:hover {
 	background-color: rgb(0, 170, 255);
+}
+
+/* Styles for small screens (mobile) */
+@media (max-width: 480px) {
+	.container .category-section {
+		width: 95%;
+	}
+
+	.sub-header {
+		flex-direction: column;
+	}
+}
+
+/* Styles for medium screens (tablets) */
+@media (min-width: 481px) and (max-width: 768px) {
+	.container .category-section {
+		width: 85%;
+	}
+}
+
+/* Styles for large screens (desktops) */
+@media (min-width: 769px) {
 }

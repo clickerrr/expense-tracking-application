@@ -1,6 +1,3 @@
-.balance-view-parent {
-}
-
 .balance-view-container {
 	display: flex;
 	align-self: center;
@@ -12,4 +9,26 @@
 .balance-view-container p {
 	margin: 0;
 	margin-bottom: 0.5rem;
+}
+
+/* Styles for small screens (mobile) */
+@media (max-width: 480px) {
+	.balance-view-container {
+		width: 95%;
+		margin-top: 1em;
+		margin-bottom: 1em;
+		align-items: center;
+	}
+}
+
+/* Styles for medium screens (tablets) */
+@media (min-width: 481px) and (max-width: 768px) {
+	.balance-view-container {
+		width: 85%;
+		align-items: center;
+	}
+}
+
+/* Styles for large screens (desktops) */
+@media (min-width: 769px) {
 }

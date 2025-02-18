@@ -4,7 +4,9 @@ import '@/styles/navbar.css';
 const Navbar = () => {
 	return (
 		<div className="navbar">
-			<h1 className="navbar-title">Expense Tracker</h1>
+			<NavLink to="/" className={'navbar-title'}>
+				Expense Tracker
+			</NavLink>
 			<NavLink className={`nav-item`} to="/">
 				Home
 			</NavLink>
