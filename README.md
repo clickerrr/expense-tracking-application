@@ -2,6 +2,8 @@
 
 A responsive, full-stack web app for tracking personal expenses, built with **React**, **TypeScript**, and a **Bun + Elysia** backend using **SQLite**. This project showcases a complete local-first architecture with modern JavaScript tooling, ideal for portfolios and practical use cases.
 
+[Backend Repository](https://github.com/clickerrr/expense-tracking-server)
+
 > 🧩 A full-stack project that emphasizes simplicity, speed, and developer productivity — built with lightweight, cutting-edge tech.
 
 ---
