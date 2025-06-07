@@ -79,7 +79,7 @@ bun install
 
 ### 3. Follow backend installation tutorial
 
-[Backend Installation]()
+[Backend Installation](https://github.com/clickerrr/expense-tracking-server)
 
 ### 4. Run the frontend
 
