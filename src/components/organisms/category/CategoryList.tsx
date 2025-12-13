@@ -9,6 +9,7 @@ import trashLogo from '@/assets/trash-icon.svg';
 import CategoryForm from '@/components/organisms/category/CategoryForm';
 import ExpenseListContext, {ExpenseListContextProps} from '@/components/context/ExpenseContext';
 import Expense from '@/types/Expense';
+import {BASEURL, PORTNUM} from '@/constants';
 
 const CategoryList = () => {
 	const categoryContext = useContext<CategoryListContextProps | undefined>(CategoryListContext);
@@ -61,7 +62,7 @@ const CategoryList = () => {
 		const requestHeaders = new Headers();
 		requestHeaders.append('Content-Type', 'application/json');
 
-		fetch('http://127.0.0.1:3000/category/add', {
+		fetch(`${BASEURL}:${PORTNUM}/category/add`, {
 			body: JSON.stringify({
 				title: newCategory.title,
 				removable: newCategory.removable,
@@ -138,7 +139,7 @@ const CategoryList = () => {
 		});
 		console.log(body);
 
-		fetch(`http://127.0.0.1:3000/category/${category.id}`, {
+		fetch(`${BASEURL}:${PORTNUM}/category/${category.id}`, {
 			body: body,
 			method: 'PATCH',
 			headers: requestHeaders,
@@ -189,7 +190,7 @@ const CategoryList = () => {
 	};
 
 	const handleRemoteDelete = (category: Category) => {
-		fetch(`http://127.0.0.1:3000/category/${category.id}`, {
+		fetch(`${BASEURL}:${PORTNUM}/category/${category.id}`, {
 			method: 'DELETE',
 		})
 			.then(response => {

@@ -7,6 +7,7 @@ import ExpenseListContext from '@/components/context/ExpenseContext';
 import CategoryListContext from '@/components//context/CategoryListContext';
 import ExpenseListElement from '@/components/atoms/expenses/ExpenseListElement';
 import monthList from '@/components/atoms/monthList';
+import {BASEURL, PORTNUM} from '@/constants';
 
 const ExpenseListView = () => {
 	const expenseContext = useContext(ExpenseListContext);
@@ -161,7 +162,7 @@ const ExpenseListView = () => {
 		const requestHeaders = new Headers();
 		requestHeaders.append('Content-Type', 'application/json');
 
-		fetch('http://127.0.0.1:3000/expense/add', {
+		fetch(`${BASEURL}:${PORTNUM}/expense/add`, {
 			body: JSON.stringify({
 				name: expense.name,
 				amount: Number(expense.amount),
@@ -221,7 +222,7 @@ const ExpenseListView = () => {
 	};
 
 	const handleDeleteExpenseRemote = (expenseToDelete: Expense) => {
-		fetch(`http://127.0.0.1:3000/expense/id/${expenseToDelete.id}`, {
+		fetch(`${BASEURL}:${PORTNUM}/expense/id/${expenseToDelete.id}`, {
 			method: 'DELETE',
 		})
 			.then(response => {
@@ -258,7 +259,7 @@ const ExpenseListView = () => {
 		const requestHeaders = new Headers();
 		requestHeaders.append('Content-Type', 'application/json');
 
-		fetch(`http://127.0.0.1:3000/expense/id/${updatedExpense.id}`, {
+		fetch(`${BASEURL}:${PORTNUM}/expense/id/${updatedExpense.id}`, {
 			body: JSON.stringify({
 				name: updatedExpense.name,
 				amount: Number(updatedExpense.amount),

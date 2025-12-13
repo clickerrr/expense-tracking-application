@@ -6,6 +6,7 @@ import BudgetCategoryItem from '@/types/BudgetCategoryItem';
 import BalanceView from '@/components/organisms/budgeting/BalanceView';
 import EditBudgetCategoryTable from '@/components/organisms/budgeting/EditBudgetCategoryTable';
 import monthList from '@/components/atoms/monthList';
+import {BASEURL, PORTNUM} from '@/constants';
 
 const Budgeting = () => {
 	const [budgetExists, setBudgetExists] = useState<boolean>(false);
@@ -32,7 +33,7 @@ const Budgeting = () => {
 	}, []);
 
 	const fetchBudget = (year: number, month: number) => {
-		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}`)
+		fetch(`${BASEURL}:${PORTNUM}/budgeting/${year}/${month + 1}`)
 			.then(response => {
 				return response.json();
 			})
@@ -47,7 +48,7 @@ const Budgeting = () => {
 	};
 
 	const fetchBudgetExpenses = (year: number, month: number) => {
-		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}/Expenses`)
+		fetch(`${BASEURL}:${PORTNUM}/budgeting/${year}/${month + 1}/Expenses`)
 			.then(response => {
 				return response.json();
 			})
@@ -71,7 +72,7 @@ const Budgeting = () => {
 				console.error(error);
 			});
 
-		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}/Monthly`)
+		fetch(`${BASEURL}:${PORTNUM}/budgeting/${year}/${month + 1}/Monthly`)
 			.then(response => {
 				return response.json();
 			})
@@ -91,7 +92,7 @@ const Budgeting = () => {
 				setMonthlyData(monthly);
 			});
 
-		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}/Income`)
+		fetch(`${BASEURL}:${PORTNUM}/budgeting/${year}/${month + 1}/Income`)
 			.then(response => {
 				return response.json();
 			})
@@ -111,7 +112,7 @@ const Budgeting = () => {
 				setIncomeData(income);
 			});
 
-		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}/starting`)
+		fetch(`${BASEURL}:${PORTNUM}/budgeting/${year}/${month + 1}/starting`)
 			.then(response => {
 				return response.json();
 			})
@@ -119,7 +120,7 @@ const Budgeting = () => {
 				setStartingBalance(result.results.startingBalance);
 			});
 
-		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}/planned`)
+		fetch(`${BASEURL}:${PORTNUM}/budgeting/${year}/${month + 1}/planned`)
 			.then(response => {
 				return response.json();
 			})
@@ -130,7 +131,7 @@ const Budgeting = () => {
 				setPlannedSum(result.results.plannedSum);
 			});
 
-		fetch(`http://127.0.0.1:3000/budgeting/${year}/${month + 1}/actual`)
+		fetch(`${BASEURL}:${PORTNUM}/budgeting/${year}/${month + 1}/actual`)
 			.then(response => {
 				return response.json();
 			})
@@ -150,7 +151,7 @@ const Budgeting = () => {
 		const requestHeaders = new Headers();
 		requestHeaders.append('Content-Type', 'application/json');
 		categoryList.forEach((element: BudgetCategoryItem) => {
-			fetch(`http://127.0.0.1:3000/budgeting/category/${year}/${month + 1}`, {
+			fetch(`${BASEURL}:${PORTNUM}/budgeting/category/${year}/${month + 1}`, {
 				method: 'POST',
 				body: JSON.stringify({
 					title: element.title,
@@ -177,7 +178,7 @@ const Budgeting = () => {
 		const requestHeaders = new Headers();
 		requestHeaders.append('Content-Type', 'application/json');
 		categoryList.forEach((element: BudgetCategoryItem) => {
-			fetch(`http://127.0.0.1:3000/budgeting/category/${year}/${month + 1}`, {
+			fetch(`${BASEURL}:${PORTNUM}/budgeting/category/${year}/${month + 1}`, {
 				method: 'PATCH',
 				body: JSON.stringify({
 					id: element.id,
@@ -209,7 +210,7 @@ const Budgeting = () => {
 		const requestHeaders = new Headers();
 		requestHeaders.append('Content-Type', 'application/json');
 		categoryList.forEach((element: BudgetCategoryItem) => {
-			fetch(`http://127.0.0.1:3000/budgeting/category/${year}/${month + 1}`, {
+			fetch(`${BASEURL}:${PORTNUM}/budgeting/category/${year}/${month + 1}`, {
 				method: 'DELETE',
 				body: JSON.stringify({
 					id: element.id,

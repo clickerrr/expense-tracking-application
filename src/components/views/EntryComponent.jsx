@@ -1,17 +1,18 @@
-import {useEffect, useState} from 'react';
-import Dashboard from '@/components/views/Dashboard';
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import Metrics from '@/components/views/Metrics';
+import CategoryListContext from '@/components/context/CategoryListContext';
+import ExpenseListContext from '@/components/context/ExpenseContext';
 import Navbar from '@/components/organisms/Navbar';
 import Budgeting from '@/components/views/Budgeting';
-import ExpenseListContext from '@/components/context/ExpenseContext';
-import CategoryListContext from '@/components/context/CategoryListContext';
+import Dashboard from '@/components/views/Dashboard';
+import Metrics from '@/components/views/Metrics';
+import {useState, useEffect} from 'react';
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import {BASEURL, PORTNUM} from '@/constants';
 
-const EntryComponent = () => {
+export const EntryComponent = () => {
 	const [expenseList, setExpenseList] = useState([]);
 	const [categoryList, setCategoryList] = useState([]);
 	useEffect(() => {
-		fetch('http://127.0.0.1:3000/expense/all')
+		fetch(`${BASEURL}:${PORTNUM}/expense/all`)
 			.then(response => {
 				console.log(response);
 				return response.json();
@@ -38,7 +39,7 @@ const EntryComponent = () => {
 				setExpenseList(expenses);
 			});
 
-		fetch('http://127.0.0.1:3000/category/all')
+		fetch(`${BASEURL}:${PORTNUM}/category/all`)
 			.then(response => {
 				console.log(response);
 				return response.json();
@@ -86,5 +87,3 @@ const EntryComponent = () => {
 		</ExpenseListContext.Provider>
 	);
 };
-
-export default EntryComponent;

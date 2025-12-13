@@ -7,6 +7,7 @@ import NewBudgetSummaryConfirmation from '@/components/molecules/budgeting/NewBu
 import NewExpensesBudget from '@/components/molecules/budgeting/NewExpensesBudget';
 import monthList from '@/components/atoms/monthList';
 import LoadingSpinner from '@/components/atoms/LoadingSpinner';
+import {BASEURL, PORTNUM} from '@/constants';
 
 interface NewBudgetFormProps {
 	selectedYear: number;
@@ -26,7 +27,7 @@ const NewBudgetForm = ({selectedYear, selectedMonth, onCancel, onComplete}: NewB
 	const pageCount = 4;
 
 	useEffect(() => {
-		fetch('http://127.0.0.1:3000/category/all?type=Expenses')
+		fetch(`${BASEURL}:${PORTNUM}/category/all?type=Expenses`)
 			.then(response => {
 				return response.json();
 			})
@@ -44,7 +45,7 @@ const NewBudgetForm = ({selectedYear, selectedMonth, onCancel, onComplete}: NewB
 				});
 				setExpenseCategories(parsedCategories);
 			});
-		fetch('http://127.0.0.1:3000/category/all?type=Monthly')
+		fetch(`${BASEURL}:${PORTNUM}/category/all?type=Monthly`)
 			.then(response => {
 				return response.json();
 			})
@@ -62,7 +63,7 @@ const NewBudgetForm = ({selectedYear, selectedMonth, onCancel, onComplete}: NewB
 				});
 				setMonthlyCategories(parsedCategories);
 			});
-		fetch('http://127.0.0.1:3000/category/all?type=Income')
+		fetch(`${BASEURL}:${PORTNUM}/category/all?type=Income`)
 			.then(response => {
 				return response.json();
 			})
@@ -113,7 +114,7 @@ const NewBudgetForm = ({selectedYear, selectedMonth, onCancel, onComplete}: NewB
 		const requestHeaders = new Headers();
 		requestHeaders.append('Content-Type', 'application/json');
 		const response = await fetch(
-			`http://127.0.0.1:3000/budgeting/create/${year}/${month + 1}`,
+			`${BASEURL}:${PORTNUM}/budgeting/create/${year}/${month + 1}`,
 			{
 				method: 'POST',
 				body: JSON.stringify({startingBalance: startingBalance}),
@@ -138,7 +139,7 @@ const NewBudgetForm = ({selectedYear, selectedMonth, onCancel, onComplete}: NewB
 		for (let i = 0; i < categoryList.length; i++) {
 			const element = categoryList[i];
 			const response = await fetch(
-				`http://127.0.0.1:3000/budgeting/category/${year}/${month + 1}`,
+				`${BASEURL}:${PORTNUM}/budgeting/category/${year}/${month + 1}`,
 				{
 					method: 'POST',
 					body: JSON.stringify({

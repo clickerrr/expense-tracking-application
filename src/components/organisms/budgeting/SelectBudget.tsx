@@ -4,6 +4,7 @@ import CreateBudgetCategory from './CreateBudgetCategory';
 import NewBudgetCategory from './NewBudgetCategory';
 import NewBudgetForm from './NewBudgetForm';
 import monthList from '@/components/atoms/monthList';
+import {BASEURL, PORTNUM} from '@/constants';
 
 interface SelectBudgetProps {
 	onSubmit: (year: number, month: number) => void;
@@ -32,7 +33,7 @@ const SelectBudget = ({
 		const generatedYearList = generateYearList(10);
 		setYearList(generatedYearList);
 
-		fetch(`http://127.0.0.1:3000/budgeting/${selectedYear}/${getMonthNumber(selectedMonth)}`)
+		fetch(`${BASEURL}:${PORTNUM}/budgeting/${selectedYear}/${getMonthNumber(selectedMonth)}`)
 			.then(response => {
 				return response.json();
 			})

@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import '@/styles/expensescategory.css';
 import BudgetCategoryItem from '@/types/BudgetCategoryItem';
 import BudgetCategoryElement from '@/components/atoms/budgeting/BudgetCategoryElement';
+import {BASEURL, PORTNUM} from '@/constants';
 interface ExpensesCategoryProps {
 	propsSelectedYear: number;
 	propsSelectedMonth: number;
@@ -17,7 +18,7 @@ const ExpensesCategory = ({propsSelectedMonth, propsSelectedYear}: ExpensesCateg
 		console.log('propsSelectedMonth', propsSelectedMonth);
 		console.log('propsSelectedYear', propsSelectedYear);
 
-		fetch(`http://127.0.0.1:3000/budgeting/category/all`)
+		fetch(`${BASEURL}:${PORTNUM}/budgeting/category/all`)
 			.then(response => {
 				return response.json();
 			})
@@ -39,7 +40,7 @@ const ExpensesCategory = ({propsSelectedMonth, propsSelectedYear}: ExpensesCateg
 			})
 			.then((finalResult: BudgetCategoryItem[]) => {
 				fetch(
-					`http://127.0.0.1:3000/budgeting/expenses/category/${propsSelectedYear}/${propsSelectedMonth}`,
+					`${BASEURL}:${PORTNUM}/budgeting/expenses/category/${propsSelectedYear}/${propsSelectedMonth}`,
 				)
 					.then(response => {
 						return response.json();
