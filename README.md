@@ -1,30 +1,98 @@
-# React + TypeScript + Vite
+# 💸 Expense Tracking Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive, full-stack web app for tracking personal expenses, built with **React**, **TypeScript**, and a **Bun + Elysia** backend using **SQLite**. This project showcases a complete local-first architecture with modern JavaScript tooling, ideal for portfolios and practical use cases.
 
-Currently, two official plugins are available:
+[Backend Repository](https://github.com/clickerrr/expense-tracking-server)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> 🧩 A full-stack project that emphasizes simplicity, speed, and developer productivity — built with lightweight, cutting-edge tech.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## 🚀 Key Highlights
 
-- Configure the top-level `parserOptions` property like this:
+- ⚛️ **React + TypeScript**: Strong typing, reusable components, and scalable architecture.
+- 🧪 **Bun + Elysia Backend**: Ultra-fast server powered by Bun runtime and Elysia framework.
+- 🗃️ **SQLite Integration**: Simple, efficient, file-based relational database for fast local data storage.
+- 🎨 **Clean UI**: Responsive layout with thoughtful UX for mobile and desktop.
+- 🧠 **Context-based State Management**: React Context API to manage app-wide state.
+- 🧪 **Development Best Practices**: Modular codebase, typed API contracts, and minimal setup.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+---
+
+## 🛠️ Technologies Used
+
+| Frontend             | Backend         | Database     | Tooling / Dev |
+|----------------------|------------------|--------------|----------------|
+| React (w/ Vite)      | Bun + Elysia      | SQLite        | TypeScript     |
+| Context API (State)  | REST API (Elysia) |               | ESLint + Prettier |
+| React Router DOM     |                  |              |    |
+
+> *Replace or update based on actual usage.
+
+---
+
+## 📁 Project Structure
+
+```
+├── src/                # Bun + Elysia backend
+│   ├── assets/
+│   ├── components/      # Major components following Atomic design
+│   │   ├── atoms/
+│   │   ├── molecules/    
+│   │   ├── organisms/
+│   │   ├── views/
+│   ├── styles/          # Stylesheets commonly reused
+│   ├── types/           # Commonly used types
+│   ├── main.jsx
+│   └── index.css            # Entry point for server
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+---
+
+## 🧪 Features
+
+- ✅ Add, edit, and delete expense entries
+- ✅ Categorize expenses by type
+- ✅ Budget expenses by month and preview monthly status
+- ✅ Persistent storage through SQLite
+- ✅ Responsive and accessible UI
+- 🚧 Multiple user support
+- 🚧 Data visualization and filtering
+- 🚧 Export/download expense history
+
+---
+
+## 📦 Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/clickerrr/expense-tracking-application.git
+cd expense-tracking-application
+```
+
+### 2. Install frontend dependencies
+
+```bash
+npm install
+# or
+bun install
+```
+
+### 3. Follow backend installation tutorial
+
+[Backend Installation](https://github.com/clickerrr/expense-tracking-server)
+
+### 4. Run the frontend
+
+```bash
+bun run dev
+```
+
+## 📬 Contact
+
+Want to connect?
+
+**Bartek Swiech**  
+[LinkedIn](https://www.linkedin.com/in/bartosz-swiech/)
+[GitHub](https://github.com/clickerrr)
